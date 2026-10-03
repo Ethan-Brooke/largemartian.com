@@ -1,0 +1,213 @@
+/* Large Martian — site styles
+   Palette: Mars from orbit at night.
+   regolith  #2a0f0f  page ground
+   night     #1a0909  deep shadow
+   oxide     #b3382c  iron red (rules, planet)
+   dust      #e9c9b4  text
+   ice       #9fd8e6  polar cap — dates, links, the one cold note
+*/
+
+:root {
+  --regolith: #2a0f0f;
+  --night: #1a0909;
+  --oxide: #b3382c;
+  --dust: #e9c9b4;
+  --dust-dim: rgba(233, 201, 180, 0.62);
+  --ice: #9fd8e6;
+  --rule: rgba(179, 56, 44, 0.45);
+  --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --gutter: clamp(16px, 4vw, 56px);
+  --measure: 36rem;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--regolith);
+  color: var(--dust);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: var(--ice); text-decoration: none; }
+a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.2em; }
+:focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; }
+
+/* ---------- top line ---------- */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 18px var(--gutter);
+  font-size: 15px;
+}
+.top .wordmark { color: var(--dust); font-weight: 700; font-stretch: 110%; }
+.top nav { display: flex; gap: 22px; }
+.top nav a { color: var(--dust-dim); }
+.top nav a:hover { color: var(--dust); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  padding: 10vh var(--gutter) 6vh;
+  min-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(64px, 17.5vw, 300px);
+  line-height: 0.84;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: var(--dust);
+}
+.hero h1 span { display: block; }
+.hero h1 span + span { margin-left: 0.26em; }
+.hero .tag {
+  position: relative;
+  z-index: 1;
+  margin: 28px 0 0;
+  max-width: var(--measure);
+  font-size: clamp(17px, 1.5vw, 21px);
+  color: var(--dust-dim);
+}
+.hero .tag a { white-space: nowrap; }
+
+/* the planet: rises from the lower right, half off-screen */
+.planet {
+  position: absolute;
+  right: -18vw;
+  bottom: -46vw;
+  width: 92vw;
+  height: 92vw;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 30%, rgba(233,201,180,0.18) 0, transparent 38%),
+    radial-gradient(circle at 60% 60%, #c7452f 0, #b3382c 35%, #7a2117 68%, #3a1210 100%);
+  box-shadow: 0 0 120px 40px rgba(179, 56, 44, 0.18);
+  pointer-events: none;
+}
+@media (min-width: 900px) {
+  .planet { right: -14vw; bottom: -58vw; width: 78vw; height: 78vw; }
+}
+@media (max-width: 640px) {
+  .hero { min-height: 0; padding-top: 14vh; }
+  .hero h1 { font-size: 21vw; }
+  .planet { right: -30vw; bottom: -60vw; width: 120vw; height: 120vw; }
+}
+
+/* ---------- sections ---------- */
+section { padding: 56px var(--gutter) 24px; }
+section h2 {
+  margin: 0 0 28px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dust-dim);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.prose { max-width: var(--measure); }
+.prose p { margin: 0 0 1em; }
+
+/* ---------- shows ---------- */
+.shows { list-style: none; margin: 0; padding: 0; }
+.show {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 0 24px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.show .date { color: var(--ice); line-height: 1; }
+.show .date .day { display: block; font-size: 44px; font-weight: 800; font-stretch: 112%; letter-spacing: -0.02em; }
+.show .date .mon { display: block; font-size: 14px; margin-top: 6px; }
+.show .where { min-width: 0; }
+.show .venue { display: block; font-size: clamp(20px, 2.4vw, 28px); font-weight: 700; font-stretch: 108%; letter-spacing: -0.01em; line-height: 1.15; }
+.show .city { color: var(--dust-dim); }
+.show .meta { color: var(--dust-dim); margin-top: 4px; font-size: 15px; }
+.show .tickets {
+  justify-self: end;
+  padding: 10px 16px;
+  border: 1.5px solid var(--ice);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.show .tickets:hover { background: var(--ice); color: var(--night); text-decoration: none; }
+.show.past { opacity: 0.55; }
+.show.past .date { color: var(--dust); }
+.empty { color: var(--dust-dim); max-width: var(--measure); padding: 8px 0 24px; }
+details.past-shows { margin-top: 24px; }
+details.past-shows summary { cursor: pointer; color: var(--dust-dim); font-size: 15px; padding: 8px 0; list-style: none; }
+details.past-shows summary::before { content: "+ "; }
+details.past-shows[open] summary::before { content: "– "; }
+
+@media (max-width: 640px) {
+  .show { grid-template-columns: 4.2rem 1fr; }
+  .show .date .day { font-size: 36px; }
+  .show .tickets { grid-column: 2; justify-self: start; margin-top: 12px; }
+}
+
+/* ---------- tracks (public listen + band recordings) ---------- */
+.session { margin-bottom: 40px; }
+.session h3 { margin: 0 0 6px; font-size: 20px; font-weight: 700; font-stretch: 108%; }
+.session .note { margin: 0 0 14px; color: var(--dust-dim); font-size: 15px; max-width: var(--measure); }
+.tracks { list-style: none; margin: 0; padding: 0; max-width: 46rem; }
+.track {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 300px);
+  gap: 16px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(179, 56, 44, 0.22);
+}
+.track .title { font-weight: 500; }
+.track audio { width: 100%; height: 32px; color-scheme: dark; }
+@media (max-width: 560px) {
+  .track { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* ---------- set lists ---------- */
+.setlist { margin-bottom: 36px; max-width: var(--measure); }
+.setlist h3 { margin: 0 0 4px; font-size: 20px; font-weight: 700; font-stretch: 108%; }
+.setlist .note { margin: 0 0 12px; color: var(--dust-dim); font-size: 15px; }
+.setlist ol { margin: 0; padding-left: 1.6em; columns: 2; column-gap: 32px; }
+.setlist li { break-inside: avoid; padding: 3px 0; }
+@media (max-width: 560px) { .setlist ol { columns: 1; } }
+
+/* ---------- calendar ---------- */
+.calendar iframe { width: 100%; height: 620px; border: 0; border-radius: 6px; background: var(--night); }
+.calendar .hint { color: var(--dust-dim); font-size: 15px; max-width: var(--measure); }
+
+/* ---------- socials / footer ---------- */
+.links { display: flex; flex-wrap: wrap; gap: 10px 26px; padding: 0; margin: 0; list-style: none; font-size: 17px; }
+footer {
+  padding: 64px var(--gutter) 40px;
+  color: var(--dust-dim);
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* band room header */
+.room-head { padding: 24px var(--gutter) 0; }
+.room-head h1 { margin: 0; font-size: clamp(40px, 8vw, 96px); font-weight: 900; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; text-transform: uppercase; }
+.room-head p { color: var(--dust-dim); max-width: var(--measure); }

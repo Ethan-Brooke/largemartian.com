@@ -1,0 +1,13 @@
+{
+  "_how_to": "Add a show as a new object in the list. Dates are YYYY-MM-DD. Upcoming shows show at the top of the homepage; past ones move to 'Past shows' automatically. 'tickets' and 'time' are optional. Keep the JSON valid (commas between items, no trailing comma).",
+  "shows": [
+    {
+      "date": "2024-04-20",
+      "venue": "T's Mom's",
+      "city": "",
+      "time": "",
+      "tickets": "",
+      "note": ""
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Band room — Large Martian</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232a0f0f'/%3E%3Ccircle cx='21' cy='23' r='13' fill='%239fd8e6'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="top">
+  <a class="wordmark" href="../">Large Martian</a>
+  <nav>
+    <a href="#practice">Practice</a>
+    <a href="#recordings">Recordings</a>
+    <a href="#setlists">Set lists</a>
+  </nav>
+</header>
+
+<div class="room-head">
+  <h1>Band room</h1>
+  <p>Not linked from the public site. Practice schedule, rough recordings, and set lists.</p>
+</div>
+
+<section id="practice" class="calendar">
+  <h2>Practice calendar</h2>
+  <div id="cal"></div>
+</section>
+
+<section id="recordings">
+  <h2>Recordings</h2>
+  <div id="rec"></div>
+</section>
+
+<section id="setlists">
+  <h2>Set lists</h2>
+  <div id="sets"></div>
+</section>
+
+<footer>
+  <span>Large Martian — band room</span>
+  <span><a href="../">Public site</a></span>
+</footer>
+
+<script>
+(async function () {
+  let data;
+  try { data = await (await fetch('band.json', {cache: 'no-store'})).json(); }
+  catch (e) { document.getElementById('rec').textContent = 'Could not load band.json.'; return; }
+
+  const cal = document.getElementById('cal');
+  if (data.calendar) {
+    cal.innerHTML = `<iframe src="${data.calendar}" loading="lazy" title="Practice calendar"></iframe>`;
+  } else {
+    cal.innerHTML = `<p class="hint">No calendar linked yet. Make a shared Google Calendar called "Large Martian practice", share it with everyone in the band, then paste its embed URL into <code>band/band.json</code> under <code>calendar</code>.</p>`;
+  }
+
+  const rec = document.getElementById('rec');
+  (data.recordings || []).forEach(sess => {
+    const div = document.createElement('div');
+    div.className = 'session';
+    div.innerHTML = `<h3>${sess.title}</h3>${sess.note ? `<p class="note">${sess.note}</p>` : ''}<ul class="tracks"></ul>`;
+    const ul = div.querySelector('ul');
+    sess.tracks.forEach(t => {
+      const src = data.base + (sess.folder ? sess.folder + '/' : '') + t.file;
+      const li = document.createElement('li');
+      li.className = 'track';
+      li.innerHTML = `<span class="title">${t.title}</span><audio controls preload="none" src="${src}"></audio>`;
+      ul.appendChild(li);
+    });
+    rec.appendChild(div);
+  });
+
+  const sets = document.getElementById('sets');
+  (data.setlists || []).forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'setlist';
+    div.innerHTML = `<h3>${s.title}</h3>${s.note ? `<p class="note">${s.note}</p>` : ''}<ol>${s.songs.map(x => `<li>${x}</li>`).join('')}</ol>`;
+    sets.appendChild(div);
+  });
+})();
+</script>
+</body>
+</html>

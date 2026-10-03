@@ -1,0 +1,30 @@
+{
+  "_how_to": "Public recordings shown on the homepage. 'base' is where the MP3s live; 'file' is the path under it. Add social/streaming links under 'links'.",
+  "base": "https://ethan-brooke.github.io/largemartian-audio/",
+  "links": [
+    { "label": "Instagram", "url": "https://instagram.com/" },
+    { "label": "YouTube", "url": "https://youtube.com/" },
+    { "label": "Bandsintown", "url": "https://www.bandsintown.com/" }
+  ],
+  "sessions": [
+    {
+      "title": "Live in the room, August 2024",
+      "note": "Straight off the recorder, no overdubs.",
+      "tracks": [
+        { "title": "Creep", "file": "public/Creep.mp3" },
+        { "title": "Don't Look Back in Anger", "file": "public/Dont Look Back in Anger.mp3" },
+        { "title": "Lucky", "file": "public/Lucky.mp3" },
+        { "title": "Margaritaville", "file": "public/Margaritaville.mp3" },
+        { "title": "Mary Jane's Last Dance", "file": "public/Mary Janes Last Dance.mp3" },
+        { "title": "One", "file": "public/One.mp3" },
+        { "title": "Peaceful Easy Feeling", "file": "public/Peaceful Easy Feeling.mp3" },
+        { "title": "Fake Plastic Trees", "file": "public/Fake Plastic Trees.mp3" },
+        { "title": "R.O.C.K. in the U.S.A.", "file": "public/ROCK in the USA.mp3" },
+        { "title": "Take It Easy", "file": "public/Take It Easy.mp3" },
+        { "title": "Tuesday's Gone", "file": "public/Tuesdays Gone.mp3" },
+        { "title": "Wagon Wheel", "file": "public/Wagon Wheel.mp3" },
+        { "title": "Wild Horses", "file": "public/Wild Horses.mp3" }
+      ]
+    }
+  ]
+}

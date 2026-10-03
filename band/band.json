@@ -1,0 +1,125 @@
+{
+  "_how_to": "Band-only page data. 'calendar' is the Google Calendar embed URL (Calendar settings > Integrate calendar > Embed code; paste just the src URL). Recordings: 'base' + 'file' is the MP3 URL. Set lists: songs in order.",
+  "calendar": "",
+  "base": "https://ethan-brooke.github.io/largemartian-audio/",
+  "recordings": [
+    {
+      "title": "Practice — May 27, 2025",
+      "folder": "2025-05-27",
+      "tracks": [
+        { "title": "Five Years", "file": "Five Years.mp3" },
+        { "title": "Oh Sweet Nothing", "file": "Oh Sweet Nothing.mp3" },
+        { "title": "Peaceful Easy Feeling", "file": "Peaceful Easy Feeling.mp3" },
+        { "title": "Where Is My Mind", "file": "Where is My Mind.mp3" }
+      ]
+    },
+    {
+      "title": "Practice — May 4, 2025",
+      "folder": "2025-05-04",
+      "tracks": [
+        { "title": "Five Years", "file": "5 years.mp3" },
+        { "title": "Come As You Are", "file": "come as you are.mp3" },
+        { "title": "Come As You Are (take 2)", "file": "come as you are 2.mp3" },
+        { "title": "Don't You Forget About Me", "file": "Dont you forget about me.mp3" },
+        { "title": "Hallelujah", "file": "Hallelujah.mp3" },
+        { "title": "Just Like Heaven", "file": "just like Heaven.mp3" },
+        { "title": "Keep On Rockin' in the Free World", "file": "keep on rockin in the free world.mp3" },
+        { "title": "Love on the Brain", "file": "love on the brain.mp3" },
+        { "title": "Mary Jane's Last Dance", "file": "Mary Jane.mp3" },
+        { "title": "Miss Ohio", "file": "Miss Ohio.mp3" },
+        { "title": "Out on the Weekend", "file": "out on the weekend.mp3" },
+        { "title": "I Wanna Be Sedated", "file": "Sedated.mp3" },
+        { "title": "I Wanna Be Sedated (take 2)", "file": "sedated 2.mp3" },
+        { "title": "Takin' Care of Business", "file": "taking care of business.mp3" },
+        { "title": "When the Roses Bloom Again", "file": "when the roses bloom again.mp3" },
+        { "title": "Where Is My Mind", "file": "where is my mind.mp3" }
+      ]
+    },
+    {
+      "title": "Practice — March 30, 2025",
+      "folder": "2025-03-30",
+      "tracks": [
+        { "title": "Five Years", "file": "5 Years.mp3" },
+        { "title": "Colors", "file": "colors.mp3" },
+        { "title": "Come As You Are", "file": "come as you are.mp3" },
+        { "title": "Cortez the Killer", "file": "cortez.mp3" },
+        { "title": "Don't You Forget About Me", "file": "dont you forget about me.mp3" },
+        { "title": "I Hate Myself for Loving You", "file": "hate myself for loving you.mp3" },
+        { "title": "Knockin' on Heaven's Door", "file": "heavens door.mp3" },
+        { "title": "Hey Joe", "file": "hey joe.mp3" },
+        { "title": "Love on the Brain", "file": "love on the brain.mp3" },
+        { "title": "Mary Jane's Last Dance", "file": "maryjanes last dance.mp3" },
+        { "title": "I Melt With You", "file": "melt with you.mp3" },
+        { "title": "Miss Ohio", "file": "miss ohio.mp3" },
+        { "title": "One", "file": "One.mp3" },
+        { "title": "Scratchy thing (idea)", "file": "Scratchy thing is cool.mp3" },
+        { "title": "Smells Like Teen Spirit", "file": "teen spirit.mp3" },
+        { "title": "Wagon Wheel", "file": "wagon wheel.mp3" },
+        { "title": "What's Going On", "file": "Whats Going On.mp3" },
+        { "title": "Where Is My Mind", "file": "Where is my mind.mp3" }
+      ]
+    },
+    {
+      "title": "Practice — March 23, 2025",
+      "folder": "2025-03-23",
+      "tracks": [
+        { "title": "Basket Case", "file": "basketcase.mp3" },
+        { "title": "Come As You Are", "file": "come as you are.mp3" },
+        { "title": "Dancing With Myself", "file": "dancing with myself.mp3" },
+        { "title": "Don't You Forget About Me", "file": "Dont you forget about me.mp3" },
+        { "title": "Favorite Colors", "file": "Favorite Colors.mp3" },
+        { "title": "I'll Stop the World", "file": "Ill stop the world.mp3" },
+        { "title": "Love on the Brain", "file": "love on the brain.mp3" },
+        { "title": "Oh Sweet Nothing", "file": "oh sweet nothing.mp3" },
+        { "title": "Sexual Healing", "file": "sexual healing.mp3" },
+        { "title": "Smells Like Teen Spirit", "file": "smells like teen spirit.mp3" }
+      ]
+    },
+    {
+      "title": "For public consumption — August 2024",
+      "folder": "public",
+      "tracks": [
+        { "title": "Creep", "file": "Creep.mp3" },
+        { "title": "Don't Look Back in Anger", "file": "Dont Look Back in Anger.mp3" },
+        { "title": "Lucky", "file": "Lucky.mp3" },
+        { "title": "Margaritaville", "file": "Margaritaville.mp3" },
+        { "title": "Mary Jane's Last Dance", "file": "Mary Janes Last Dance.mp3" },
+        { "title": "One", "file": "One.mp3" },
+        { "title": "Peaceful Easy Feeling", "file": "Peaceful Easy Feeling.mp3" },
+        { "title": "Fake Plastic Trees", "file": "Fake Plastic Trees.mp3" },
+        { "title": "R.O.C.K. in the U.S.A.", "file": "ROCK in the USA.mp3" },
+        { "title": "Take It Easy", "file": "Take It Easy.mp3" },
+        { "title": "Tuesday's Gone", "file": "Tuesdays Gone.mp3" },
+        { "title": "Wagon Wheel", "file": "Wagon Wheel.mp3" },
+        { "title": "Wild Horses", "file": "Wild Horses.mp3" }
+      ]
+    },
+    {
+      "title": "New songs, solo — May 14, 2024",
+      "folder": "2024-05-14-solo",
+      "tracks": [
+        { "title": "Drunken", "file": "Drunken.mp3" },
+        { "title": "Green San Anselmo", "file": "Green San Anselmo.mp3" },
+        { "title": "Islands in the Sky", "file": "Islands in the sky 1.mp3" },
+        { "title": "Orchids", "file": "Orchids.mp3" },
+        { "title": "Took the Coke and the Money", "file": "Took the coke and the money.mp3" },
+        { "title": "Trailer", "file": "Trailer.mp3" }
+      ]
+    }
+  ],
+  "setlists": [
+    {
+      "title": "T's Mom's — April 20, 2024",
+      "note": "In the order we played it.",
+      "songs": [
+        "One",
+        "Street Spirit (Fade Out)",
+        "Takin' Care of Business",
+        "Oh Sweet Nothing",
+        "Wagon Wheel",
+        "Don't Look Back in Anger",
+        "Fake Plastic Trees"
+      ]
+    }
+  ]
+}
