@@ -2,6 +2,16 @@
   "_how_to": "Add a show as a new object in the list. Dates are YYYY-MM-DD. Upcoming shows show at the top of the homepage; past ones move to 'Past shows' automatically. 'time', 'tickets', 'note' and 'poster' (path to an image in img/), 'recording' (link to the full-show recording, shown on past shows) and 'map' are optional. Keep the JSON valid (commas between items, no trailing comma).",
   "shows": [
     {
+      "date": "2026-02-27",
+      "venue": "Peri's — on the patio",
+      "city": "Fairfax, CA",
+      "time": "",
+      "tickets": "",
+      "note": "29 Broadway",
+      "recording": "https://drive.google.com/file/d/1TGaAWl6Nmw_YRi6E89iNaklQNMwkW7Oe/view",
+      "map": "https://maps.google.com/?q=Peri's+Silver+Dollar+Bar,+29+Broadway,+Fairfax,+CA+94930"
+    },
+    {
       "date": "2025-11-07",
       "venue": "Peri's — on the patio",
       "city": "Fairfax, CA",
@@ -33,6 +43,14 @@
       "poster": "img/poster-dugout-2025-03-06.jpg",
       "recording": "https://drive.google.com/drive/folders/1xvKhGQJAKEj3dZdROgnJ1FpwtedVSsox",
       "map": "https://maps.google.com/?q=Dugout+Bar,+20+Veterans+Place,+San+Anselmo,+CA+94960"
+    },
+    {
+      "date": "2024-10-06",
+      "venue": "Glenwood Neighborhood Association",
+      "city": "San Rafael, CA",
+      "time": "",
+      "tickets": "",
+      "note": ""
     },
     {
       "date": "2024-04-20",
