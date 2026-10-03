@@ -35,6 +35,7 @@
   <a class="wordmark" href="../"><img src="../img/head.png" alt="" width="28" height="25"> Large Martian</a>
   <nav>
     <a href="#practice">Practice</a>
+    <a href="#scheduler">Scheduler</a>
     <a href="#archive">Sessions</a>
     <a href="#recordings">Tracks</a>
     <a href="#setlists">Set lists</a>
@@ -53,6 +54,11 @@
 <section id="practice" class="calendar">
   <h2>Practice calendar</h2>
   <div id="cal"></div>
+</section>
+
+<section id="scheduler" class="sched">
+  <h2>Practice scheduler</h2>
+  <div id="sched-body"></div>
 </section>
 
 <section id="archive">
@@ -141,6 +147,133 @@
     render(data);
   }
 
+
+  // ---------- practice scheduler ----------
+  async function renderScheduler(data) {
+    const root = document.getElementById('sched-body');
+    const cfg = data.scheduler || {};
+    if (!cfg.url) {
+      root.innerHTML = `<p class="hint">Not connected yet. The scheduler engine is a small Google script; once it's deployed, its web-app URL goes in <code>scheduler.url</code> via <a href="lock.html">Update this page</a>.</p>`;
+      return;
+    }
+    const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const MON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const api = async (payload) => {
+      const r = await fetch(cfg.url, { method: 'POST', body: JSON.stringify(Object.assign({ token: cfg.token }, payload)) });
+      const j = await r.json(); if (!j.ok) throw new Error(j.error || 'request failed'); return j;
+    };
+    const ME_KEY = 'lm-member';
+    let me = ''; try { me = localStorage.getItem(ME_KEY) || ''; } catch (_) {}
+    const now = new Date();
+    let month = `${now.getMonth() === 11 ? now.getFullYear() + 1 : now.getFullYear()}-${String((now.getMonth() + 1) % 12 + 1).padStart(2, '0')}`;
+    let state, mine = new Set(), dirty = false;
+
+    root.innerHTML = `<p class="hint">Loading…</p>`;
+    async function load() {
+      try { state = await api({ action: 'state', month }); }
+      catch (e) { root.innerHTML = `<p class="hint">Couldn't reach the scheduler: ${e.message}</p>`; return; }
+      if (!me && state.settings.members[0]) me = state.settings.members[0].name;
+      mine = new Set(state.availability[me] || []); dirty = false;
+      draw();
+    }
+
+    function monthDays() {
+      const [y, m] = month.split('-').map(Number); const out = [];
+      for (let d = new Date(y, m - 1, 1); d.getMonth() === m - 1; d.setDate(d.getDate() + 1))
+        out.push({ date: `${y}-${String(m).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, dow: d.getDay(), day: d.getDate() });
+      return out;
+    }
+    function shiftMonth(n) { let [y, m] = month.split('-').map(Number); m += n; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; } month = `${y}-${String(m).padStart(2,'0')}`; load(); }
+    const fmtT = hm => { const [h, mi] = hm.split(':').map(Number); return `${h % 12 || 12}${mi ? ':' + String(mi).padStart(2,'0') : ''}${h < 12 ? 'am' : 'pm'}`; };
+
+    function draw() {
+      const s = state.settings, [y, m] = month.split('-').map(Number);
+      const picked = new Set((state.schedule.length ? state.schedule : state.preview).map(p => p.date));
+      const onCal = state.schedule.length > 0;
+      const days = monthDays();
+      const lead = (days[0].dow + 6) % 7; // Monday-first grid
+      const busyCount = d => Object.entries(state.availability).filter(([who, dates]) => who !== me && dates.includes(d)).map(([who]) => who);
+      const answered = Object.keys(state.availability);
+      const missing = s.members.map(x => x.name).filter(n => !answered.includes(n));
+
+      root.innerHTML = `
+        <div class="sched-top">
+          <label>I am <select id="me">${s.members.map(x => `<option ${x.name === me ? 'selected' : ''}>${x.name}</option>`).join('')}</select></label>
+          <div class="month-nav"><button class="btn ghost small" id="prev">‹</button><strong>${MON[m-1]} ${y}</strong><button class="btn ghost small" id="next">›</button></div>
+        </div>
+        <p class="hint">Tap the days you <strong>can't</strong> make, then save. Gold = proposed practice${onCal ? ' (on the calendar)' : ''}.</p>
+        <div class="grid">
+          ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<div class="gh">${d}</div>`).join('')}
+          ${'<div></div>'.repeat(lead)}
+          ${days.map(d => { const others = busyCount(d.date); const cls = ['gd', mine.has(d.date) ? 'busy' : '', picked.has(d.date) ? 'picked' : '', s.dayOrder.includes(DAYS[d.dow]) ? '' : 'off'].join(' ');
+            return `<button type="button" class="${cls}" data-d="${d.date}" title="${others.length ? 'Out: ' + others.join(', ') : ''}"><span class="n">${d.day}</span>${others.length ? `<span class="o">${others.length} out</span>` : ''}</button>`; }).join('')}
+        </div>
+        <div class="row">
+          <button class="btn" id="save" ${dirty ? '' : 'disabled'}>Save my days</button>
+          <span class="hint" style="margin:0">${answered.length}/${s.members.length} answered${missing.length ? ' — waiting on ' + missing.join(', ') : ''}</span>
+        </div>
+
+        <h3>${onCal ? 'On the calendar' : 'Proposed'} for ${MON[m-1]}</h3>
+        <ul class="plan">${(onCal ? state.schedule : state.preview).map(p => { const [yy, mm, dd] = p.date.split('-').map(Number); const dt = new Date(yy, mm-1, dd); return `<li><strong>${DAYS[dt.getDay()]} ${MON[mm-1].slice(0,3)} ${dd}</strong> ${fmtT(p.start)}–${fmtT(p.end)}</li>`; }).join('') || '<li>No day works for everyone yet.</li>'}</ul>
+        <div class="row">
+          <button class="btn" id="run">${onCal ? 'Rebuild and update the calendar' : 'Put it on the calendar'}</button>
+          <button class="btn ghost" id="poll">Email everyone the poll</button>
+          <span class="hint" id="msg" style="margin:0"></span>
+        </div>
+
+        <details class="settings">
+          <summary>Settings</summary>
+          <div class="sgrid">
+            <label>Practices per week <select id="ppw">${[1,2,3,4].map(n => `<option ${n == s.practicesPerWeek ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+            <label>Poll goes out on the <input type="number" min="1" max="28" id="pollDay" value="${s.pollDay}"> of the month</label>
+            <label>Schedule is set on the <input type="number" min="1" max="28" id="deadlineDay" value="${s.deadlineDay}"></label>
+            <label>No answer by then means <select id="noAnswer"><option value="available" ${s.noAnswer === 'available' ? 'selected' : ''}>they're available</option><option value="skip" ${s.noAnswer === 'skip' ? 'selected' : ''}>hold off on every day</option></select></label>
+            <label>Weekday practice <input type="time" id="wd1" value="${s.slots.weekday.start}"> to <input type="time" id="wd2" value="${s.slots.weekday.end}"></label>
+            <label>Weekend practice <input type="time" id="we1" value="${s.slots.weekend.start}"> to <input type="time" id="we2" value="${s.slots.weekend.end}"></label>
+            <label>Pick days where <select id="minFree"><option value="all" ${s.minFree === 'all' ? 'selected' : ''}>everyone is free</option>${s.members.map((_, i) => i + 1).filter(n => n < s.members.length).map(n => `<option value="${n}" ${String(s.minFree) === String(n) ? 'selected' : ''}>at least ${n} are free</option>`).join('')}</select></label>
+            <label><input type="checkbox" id="notify" ${s.notify ? 'checked' : ''}> Send the emails</label>
+          </div>
+          <div class="order">
+            <strong>Day preference</strong>
+            <ol id="order">${s.dayOrder.map((d, i) => `<li data-d="${d}">${d} <span><button type="button" class="mv" data-i="${i}" data-dir="-1">▲</button><button type="button" class="mv" data-i="${i}" data-dir="1">▼</button><button type="button" class="rm" data-i="${i}">✕</button></span></li>`).join('')}</ol>
+            <div class="row">${DAYS.filter(d => !s.dayOrder.includes(d)).map(d => `<button type="button" class="btn ghost small add" data-d="${d}">+ ${d}</button>`).join('')}</div>
+          </div>
+          <div class="members">
+            <strong>Members</strong>
+            <div id="members">${s.members.map((x, i) => `<div class="mrow"><input value="${x.name}" placeholder="Name" data-i="${i}" data-k="name"><input value="${x.email}" placeholder="email" data-i="${i}" data-k="email"><button type="button" class="rmm" data-i="${i}">✕</button></div>`).join('')}</div>
+            <button type="button" class="btn ghost small" id="addm">+ Add member</button>
+          </div>
+          <div class="row"><button class="btn" id="saveSettings">Save settings</button><a class="hint" style="margin:0" href="${state.sheet}" target="_blank" rel="noopener">Open the answers sheet</a></div>
+        </details>`;
+
+      const msg = (t, bad) => { const el = root.querySelector('#msg'); el.textContent = t; el.style.color = bad ? 'var(--magenta)' : ''; };
+      root.querySelector('#me').onchange = e => { me = e.target.value; try { localStorage.setItem(ME_KEY, me); } catch (_) {} mine = new Set(state.availability[me] || []); dirty = false; draw(); };
+      root.querySelector('#prev').onclick = () => shiftMonth(-1);
+      root.querySelector('#next').onclick = () => shiftMonth(1);
+      root.querySelectorAll('.gd').forEach(b => b.onclick = () => { const d = b.dataset.d; mine.has(d) ? mine.delete(d) : mine.add(d); dirty = true; draw(); });
+      root.querySelector('#save').onclick = async () => { msg('Saving…'); try { const r = await api({ action: 'saveAvailability', month, member: me, unavailable: [...mine] }); state.availability = r.availability; dirty = false; const p = await api({ action: 'preview', month }); state.preview = p.picked; draw(); msg('Saved.'); } catch (e) { msg(e.message, true); } };
+      root.querySelector('#run').onclick = async () => { if (!confirm(`Write ${MON[m-1]}'s practices to the Google Calendar and email the band?`)) return; msg('Building…'); try { await api({ action: 'run', month }); await load(); } catch (e) { msg(e.message, true); } };
+      root.querySelector('#poll').onclick = async () => { msg('Sending…'); try { await api({ action: 'openPoll', month }); msg('Poll emailed.'); } catch (e) { msg(e.message, true); } };
+
+      // settings editing (local until saved)
+      const reorder = (i, dir) => { const o = s.dayOrder; const j = i + dir; if (j < 0 || j >= o.length) return; [o[i], o[j]] = [o[j], o[i]]; draw(); root.querySelector('.settings').open = true; };
+      root.querySelectorAll('.mv').forEach(b => b.onclick = () => reorder(+b.dataset.i, +b.dataset.dir));
+      root.querySelectorAll('.rm').forEach(b => b.onclick = () => { s.dayOrder.splice(+b.dataset.i, 1); draw(); root.querySelector('.settings').open = true; });
+      root.querySelectorAll('.add').forEach(b => b.onclick = () => { s.dayOrder.push(b.dataset.d); draw(); root.querySelector('.settings').open = true; });
+      root.querySelectorAll('.rmm').forEach(b => b.onclick = () => { s.members.splice(+b.dataset.i, 1); draw(); root.querySelector('.settings').open = true; });
+      root.querySelector('#addm').onclick = () => { s.members.push({ name: '', email: '' }); draw(); root.querySelector('.settings').open = true; };
+      root.querySelectorAll('#members input').forEach(inp => inp.oninput = () => { s.members[+inp.dataset.i][inp.dataset.k] = inp.value; });
+      root.querySelector('#saveSettings').onclick = async () => {
+        const g = id => root.querySelector('#' + id);
+        const ns = { practicesPerWeek: +g('ppw').value, pollDay: +g('pollDay').value, deadlineDay: +g('deadlineDay').value, noAnswer: g('noAnswer').value, minFree: g('minFree').value,
+          slots: { weekday: { start: g('wd1').value, end: g('wd2').value }, weekend: { start: g('we1').value, end: g('we2').value } },
+          dayOrder: s.dayOrder, members: s.members.filter(x => x.name), notify: g('notify').checked };
+        msg('Saving settings…'); try { await api({ action: 'saveSettings', settings: ns }); await load(); } catch (e) { msg(e.message, true); }
+      };
+    }
+    load();
+  }
+
   function render(data) {
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -151,6 +284,8 @@
     } else {
       cal.innerHTML = `<p class="hint">No calendar linked yet. Make a shared Google Calendar called "Large Martian practice", share it with everyone in the band (Make changes to events), then put its embed URL in <code>calendar</code> and its share link in <code>calendarLink</code> via <a href="lock.html">Update this page</a>.</p>`;
     }
+
+    renderScheduler(data);
 
     const arch = document.getElementById('arch');
     const items = (data.archive || []).slice().sort((a,b) => b.date.localeCompare(a.date));
