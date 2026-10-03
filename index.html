@@ -124,6 +124,10 @@
   try {
     const pub = await (await fetch('listen.json', {cache: 'no-store'})).json();
     const wrap = document.getElementById('public-tracks');
+    if (!(pub.sessions || []).length) {
+      document.getElementById('listen').hidden = true;
+      document.querySelector('.top nav a[href="#listen"]').hidden = true;
+    }
     (pub.sessions || []).forEach(sess => {
       const div = document.createElement('div');
       div.className = 'session';
