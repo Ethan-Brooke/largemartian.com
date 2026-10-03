@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Large Martian</title>
   <meta name="description" content="Large Martian — Marin County rock band. Upcoming shows, recordings, and where to find us.">
+  <meta name="theme-color" content="#120b22">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap" rel="stylesheet">
@@ -13,11 +14,11 @@
   <link rel="apple-touch-icon" href="img/favicon.png">
   <meta property="og:title" content="Large Martian">
   <meta property="og:description" content="Marin County rock band. Shows, recordings, and where to find us.">
-  <meta property="og:image" content="https://largemartian.com/img/cover.jpg">
+  <meta property="og:image" content="https://largemartian.com/img/og.jpg">
 </head>
 <body>
 
-<header class="top">
+<header class="top over">
   <a class="wordmark" href="#"><img src="img/head.png" alt="" width="28" height="25"> Large Martian</a>
   <nav>
     <a href="#shows">Shows</a>
@@ -27,13 +28,14 @@
 </header>
 
 <section class="hero" aria-label="Large Martian">
-  <div class="planet" aria-hidden="true"></div>
-  <img class="alien" src="img/head.png" alt="" aria-hidden="true">
-  <h1><span>Large</span><span>Martian</span></h1>
-  <p class="tag">Marin County's own extraterrestrial rock band. Bowie, Neil Young, Radiohead, Tom Petty, the Pixies and more, played loud. <a href="#shows">Next show ↓</a></p>
+  <div class="hero-bg" style="background-image:url(img/hero.jpg)" aria-hidden="true"></div>
+  <img class="hero-img" src="img/hero.jpg" alt="Large Martian: five alien skeletons playing guitars, bass and drums on a Martian plateau under a sky full of planets" fetchpriority="high">
+  <h1 class="sr-only">Large Martian</h1>
+  <div class="hero-foot">
+    <p class="tag">Marin County's own extraterrestrial rock band. Bowie, Neil Young, Radiohead, Tom Petty, the Pixies and more, played loud.</p>
+    <a class="btn" href="#shows">Shows</a>
+  </div>
 </section>
-
-<div class="strip" aria-hidden="true"><img src="img/cover.jpg" alt=""></div>
 
 <section id="shows">
   <h2>Shows</h2>
@@ -78,20 +80,22 @@
 
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const today = new Date(); today.setHours(0,0,0,0);
-
   function parseDate(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
 
   function showRow(s, past) {
     const d = parseDate(s.date);
     const li = document.createElement('li');
     li.className = 'show' + (past ? ' past' : '');
-    const where = [s.city, s.time].filter(Boolean).join(' · ');
+    const links = [];
+    if (past && s.recording) links.push(`<a href="${s.recording}" target="_blank" rel="noopener">Listen to the full show</a>`);
+    if (s.map) links.push(`<a href="${s.map}" target="_blank" rel="noopener">Map</a>`);
     li.innerHTML = `
       <div class="date"><span class="day">${d.getDate()}</span><span class="mon">${MONTHS[d.getMonth()]} ${d.getFullYear()}</span></div>
       <div class="where">
         <span class="venue">${s.venue || ''}</span>
         ${s.city ? `<span class="city">${s.city}</span>` : ''}
         ${(s.time || s.note) ? `<div class="meta">${[s.time, s.note].filter(Boolean).join(' — ')}</div>` : ''}
+        ${links.length ? `<div class="links">${links.join('')}</div>` : ''}
       </div>
       ${(!past && s.tickets) ? `<a class="tickets" href="${s.tickets}" target="_blank" rel="noopener">Tickets</a>` : ''}
       ${s.poster ? `<a class="poster" href="${s.poster}" target="_blank" rel="noopener"><img src="${s.poster}" alt="Poster: ${s.venue}, ${s.date}" loading="lazy"></a>` : ''}`;
@@ -107,8 +111,9 @@
     up.forEach(s => upEl.appendChild(showRow(s, false)));
     document.getElementById('no-shows').hidden = up.length > 0;
     if (past.length) {
-      document.getElementById('past-wrap').hidden = false;
-      if (!up.length) document.getElementById('past-wrap').open = true;
+      const wrap = document.getElementById('past-wrap');
+      wrap.hidden = false;
+      if (!up.length) wrap.open = true;
       const pEl = document.getElementById('past');
       past.forEach(s => pEl.appendChild(showRow(s, true)));
     }

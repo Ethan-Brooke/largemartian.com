@@ -1,5 +1,5 @@
 {
-  "_how_to": "Add a show as a new object in the list. Dates are YYYY-MM-DD. Upcoming shows show at the top of the homepage; past ones move to 'Past shows' automatically. 'time', 'tickets', 'note' and 'poster' (path to an image in img/) are optional. Keep the JSON valid (commas between items, no trailing comma).",
+  "_how_to": "Add a show as a new object in the list. Dates are YYYY-MM-DD. Upcoming shows show at the top of the homepage; past ones move to 'Past shows' automatically. 'time', 'tickets', 'note' and 'poster' (path to an image in img/), 'recording' (link to the full-show recording, shown on past shows) and 'map' are optional. Keep the JSON valid (commas between items, no trailing comma).",
   "shows": [
     {
       "date": "2025-11-07",
@@ -8,7 +8,9 @@
       "time": "5pm",
       "tickets": "",
       "note": "29 Broadway",
-      "poster": "img/poster-peris-2025-11-07.jpg"
+      "poster": "img/poster-peris-2025-11-07.jpg",
+      "recording": "https://drive.google.com/drive/folders/1-w2gLj-NDkx2seppfclw7H1rbR0vGThs",
+      "map": "https://maps.google.com/?q=Peri's+Silver+Dollar+Bar,+29+Broadway,+Fairfax,+CA+94930"
     },
     {
       "date": "2025-09-25",
@@ -17,7 +19,9 @@
       "time": "7pm",
       "tickets": "",
       "note": "20 Veterans Place",
-      "poster": "img/poster-dugout-2025-09-25.jpg"
+      "poster": "img/poster-dugout-2025-09-25.jpg",
+      "recording": "https://drive.google.com/drive/folders/1UR8vRrjhbcAuRhN9rrcgqi1Ra21nrK-5",
+      "map": "https://maps.google.com/?q=Dugout+Bar,+20+Veterans+Place,+San+Anselmo,+CA+94960"
     },
     {
       "date": "2025-03-06",
@@ -26,7 +30,9 @@
       "time": "7pm",
       "tickets": "",
       "note": "20 Veterans Place",
-      "poster": "img/poster-dugout-2025-03-06.jpg"
+      "poster": "img/poster-dugout-2025-03-06.jpg",
+      "recording": "https://drive.google.com/drive/folders/1xvKhGQJAKEj3dZdROgnJ1FpwtedVSsox",
+      "map": "https://maps.google.com/?q=Dugout+Bar,+20+Veterans+Place,+San+Anselmo,+CA+94960"
     },
     {
       "date": "2024-04-20",

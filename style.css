@@ -1,34 +1,32 @@
 /* Large Martian — site styles
-   Palette: Mars from orbit at night.
-   regolith  #2a0f0f  page ground
-   night     #1a0909  deep shadow
-   oxide     #b3382c  iron red (rules, planet)
-   dust      #e9c9b4  text
-   ice       #9fd8e6  polar cap — dates, links, the one cold note
+   Palette lifted from the band's hero artwork: deep space, gold, magenta, cyan, orange.
 */
 
 :root {
-  --regolith: #2a0f0f;
-  --night: #1a0909;
-  --oxide: #b3382c;
-  --dust: #e9c9b4;
-  --dust-dim: rgba(233, 201, 180, 0.62);
-  --ice: #9fd8e6;
-  --rule: rgba(179, 56, 44, 0.45);
+  --space: #120b22;      /* page ground: the sky behind the planets */
+  --deep: #0b0716;       /* deeper shadow */
+  --panel: #1c1133;      /* raised surfaces */
+  --cream: #f6ead0;      /* body text */
+  --cream-dim: rgba(246, 234, 208, 0.64);
+  --gold: #f0c23c;       /* dates, the "Large Martian" banner gold */
+  --magenta: #e23a8e;    /* rules, show highlights */
+  --cyan: #45cde8;       /* links, actions */
+  --orange: #ef8a2a;     /* hover / warmth */
+  --rule: rgba(226, 58, 142, 0.38);
+  --rule-soft: rgba(226, 58, 142, 0.2);
   --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --gutter: clamp(16px, 4vw, 56px);
   --measure: 36rem;
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
   margin: 0;
-  background: var(--regolith);
-  color: var(--dust);
+  background: var(--space);
+  color: var(--cream);
   font-family: var(--font);
   font-size: 17px;
   line-height: 1.5;
@@ -36,107 +34,78 @@ body {
   overflow-x: hidden;
 }
 
-a { color: var(--ice); text-decoration: none; }
-a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.2em; }
-:focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; }
+a { color: var(--cyan); text-decoration: none; }
+a:hover, a:focus-visible { color: var(--gold); text-decoration: underline; text-underline-offset: 0.2em; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- top line ---------- */
 .top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding: 18px var(--gutter);
+  align-items: center;
+  padding: 16px var(--gutter);
   font-size: 15px;
 }
-.top .wordmark { color: var(--dust); font-weight: 700; font-stretch: 110%; display: inline-flex; align-items: center; gap: 10px; }
-.top .wordmark img { width: 28px; height: auto; opacity: 0.92; }
+.top.over { position: absolute; top: 0; left: 0; right: 0; z-index: 3; }
+.top .wordmark { color: var(--cream); font-weight: 700; font-stretch: 110%; display: inline-flex; align-items: center; gap: 10px; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+.top .wordmark img { width: 28px; height: auto; }
 .top nav { display: flex; gap: 22px; }
-.top nav a { color: var(--dust-dim); }
-.top nav a:hover { color: var(--dust); }
+.top nav a { color: var(--cream); text-shadow: 0 1px 6px rgba(0,0,0,0.7); font-weight: 600; }
+.top nav a:hover { color: var(--gold); }
 
-/* ---------- hero ---------- */
+/* ---------- hero: the artwork, edge to edge ---------- */
 .hero {
   position: relative;
-  padding: 10vh var(--gutter) 6vh;
-  min-height: 72vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  height: 100svh;
+  min-height: 520px;
   overflow: hidden;
+  background: var(--deep);
 }
-.hero h1 {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  font-weight: 900;
-  font-stretch: 125%;
-  font-size: clamp(64px, 17.5vw, 300px);
-  line-height: 0.84;
-  letter-spacing: -0.035em;
-  text-transform: uppercase;
-  color: var(--dust);
+.hero-bg {
+  position: absolute; inset: -6%;
+  background-size: cover; background-position: center;
+  filter: blur(40px) brightness(0.75) saturate(1.5);
+  transform: scale(1.1);
 }
-.hero h1 span { display: block; }
-.hero h1 span + span { margin-left: 0.26em; }
-.hero .tag {
-  position: relative;
-  z-index: 1;
-  margin: 28px 0 0;
-  max-width: var(--measure);
-  font-size: clamp(17px, 1.5vw, 21px);
-  color: var(--dust-dim);
+.hero-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain; object-position: center;
+  display: block;
 }
-.hero .tag a { white-space: nowrap; }
+.hero-foot {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 120px var(--gutter) 28px;
+  background: linear-gradient(to top, var(--space) 0%, rgba(18,11,34,0.85) 35%, rgba(18,11,34,0) 100%);
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+}
+.hero-foot .tag { margin: 0; max-width: var(--measure); font-size: clamp(16px, 1.4vw, 20px); color: var(--cream); text-shadow: 0 1px 8px rgba(0,0,0,0.7); }
+.btn {
+  display: inline-block; padding: 12px 22px; border-radius: 999px;
+  background: var(--gold); color: var(--deep); font-weight: 700; font-size: 15px;
+  border: 0; cursor: pointer; font-family: inherit;
+}
+.btn:hover, .btn:focus-visible { background: var(--cyan); color: var(--deep); text-decoration: none; }
+.btn.ghost { background: transparent; color: var(--cream); border: 1.5px solid var(--cyan); }
+.btn.ghost:hover { background: var(--cyan); color: var(--deep); }
 
-/* the alien: the band's mark, rising with the planet */
-.alien {
-  position: absolute;
-  right: clamp(16px, 5vw, 80px);
-  top: 4vh;
-  width: clamp(120px, 19vw, 300px);
-  height: auto;
-  opacity: 0.9;
-  z-index: 0;
-  pointer-events: none;
+@media (max-width: 700px) {
+  .top.over { position: static; }
+  .hero { height: auto; min-height: 0; }
+  .hero-bg { display: none; }
+  .hero-img { position: static; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+  .hero-foot { position: static; padding: 18px var(--gutter) 8px; background: none; }
+  .hero-foot .tag { text-shadow: none; }
 }
-.hero h1 { position: relative; z-index: 1; }
-
-/* the planet: rises from the lower right, half off-screen */
-.planet {
-  position: absolute;
-  right: -18vw;
-  bottom: -46vw;
-  width: 92vw;
-  height: 92vw;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 36% 30%, rgba(233,201,180,0.18) 0, transparent 38%),
-    radial-gradient(circle at 60% 60%, #c7452f 0, #b3382c 35%, #7a2117 68%, #3a1210 100%);
-  box-shadow: 0 0 120px 40px rgba(179, 56, 44, 0.18);
-  pointer-events: none;
-}
-@media (min-width: 900px) {
-  .planet { right: -14vw; bottom: -58vw; width: 78vw; height: 78vw; }
-}
-@media (max-width: 640px) {
-  .hero { min-height: 0; padding-top: 22vh; }
-  .hero h1 { font-size: 18.5vw; }
-  .hero h1 span + span { margin-left: 0.15em; }
-  .planet { right: -30vw; bottom: -60vw; width: 120vw; height: 120vw; }
-  .alien { width: 38vw; right: 5vw; top: 5vh; }
-}
-
-/* ---------- cover strip ---------- */
-.strip { width: 100%; height: clamp(180px, 34vw, 520px); overflow: hidden; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--night); }
-.strip img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; display: block; }
 
 /* ---------- sections ---------- */
 section { padding: 56px var(--gutter) 24px; }
 section h2 {
   margin: 0 0 28px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--dust-dim);
+  font-size: 15px; font-weight: 700;
+  color: var(--gold);
   padding-bottom: 10px;
   border-bottom: 1px solid var(--rule);
 }
@@ -151,33 +120,29 @@ section h2 {
   gap: 0 24px;
   align-items: baseline;
   padding: 22px 0;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-soft);
 }
-.show .date { color: var(--ice); line-height: 1; }
+.show .date { color: var(--gold); line-height: 1; }
 .show .date .day { display: block; font-size: 44px; font-weight: 800; font-stretch: 112%; letter-spacing: -0.02em; }
 .show .date .mon { display: block; font-size: 14px; margin-top: 6px; }
 .show .where { min-width: 0; }
 .show .venue { display: block; font-size: clamp(20px, 2.4vw, 28px); font-weight: 700; font-stretch: 108%; letter-spacing: -0.01em; line-height: 1.15; }
-.show .city { color: var(--dust-dim); }
-.show .meta { color: var(--dust-dim); margin-top: 4px; font-size: 15px; }
+.show .city { color: var(--cream-dim); }
+.show .meta { color: var(--cream-dim); margin-top: 4px; font-size: 15px; }
+.show .links { margin-top: 10px; display: flex; gap: 18px; flex-wrap: wrap; font-size: 15px; }
 .show .tickets {
   justify-self: end;
-  padding: 10px 16px;
-  border: 1.5px solid var(--ice);
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 15px;
-  white-space: nowrap;
+  padding: 10px 16px; border: 1.5px solid var(--cyan); border-radius: 999px;
+  font-weight: 600; font-size: 15px; white-space: nowrap; color: var(--cyan);
 }
-.show .tickets:hover { background: var(--ice); color: var(--night); text-decoration: none; }
+.show .tickets:hover { background: var(--cyan); color: var(--deep); text-decoration: none; }
 .show .poster { grid-column: 3; grid-row: 1 / span 2; justify-self: end; align-self: start; }
-.show .poster img { width: 96px; height: auto; display: block; border-radius: 3px; box-shadow: 0 2px 12px rgba(0,0,0,0.4); transition: transform .15s ease; }
+.show .poster img { width: 96px; height: auto; display: block; border-radius: 3px; box-shadow: 0 2px 14px rgba(0,0,0,0.5); transition: transform .15s ease; }
 .show .poster:hover img { transform: scale(1.04); }
-.show.past .date, .show.past .where { opacity: 0.72; }
-.show.past .date { color: var(--dust); }
-.empty { color: var(--dust-dim); max-width: var(--measure); padding: 8px 0 24px; }
+.show.past .date, .show.past .where > .venue, .show.past .city, .show.past .meta { opacity: 0.8; }
+.empty { color: var(--cream-dim); max-width: var(--measure); padding: 8px 0 24px; }
 details.past-shows { margin-top: 24px; }
-details.past-shows summary { cursor: pointer; color: var(--dust-dim); font-size: 15px; padding: 8px 0; list-style: none; }
+details.past-shows summary { cursor: pointer; color: var(--cream-dim); font-size: 15px; padding: 8px 0; list-style: none; }
 details.past-shows summary::before { content: "+ "; }
 details.past-shows[open] summary::before { content: "– "; }
 
@@ -188,48 +153,42 @@ details.past-shows[open] summary::before { content: "– "; }
   .show .poster { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 12px; }
 }
 
-/* ---------- tracks (public listen + band recordings) ---------- */
+/* ---------- tracks ---------- */
 .session { margin-bottom: 40px; }
 .session h3 { margin: 0 0 6px; font-size: 20px; font-weight: 700; font-stretch: 108%; }
-.session .note { margin: 0 0 14px; color: var(--dust-dim); font-size: 15px; max-width: var(--measure); }
+.session .note { margin: 0 0 14px; color: var(--cream-dim); font-size: 15px; max-width: var(--measure); }
 .tracks { list-style: none; margin: 0; padding: 0; max-width: 46rem; }
 .track {
-  display: grid;
-  grid-template-columns: 1fr minmax(0, 300px);
-  gap: 16px;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(179, 56, 44, 0.22);
+  display: grid; grid-template-columns: 1fr minmax(0, 300px); gap: 16px; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--rule-soft);
 }
 .track .title { font-weight: 500; }
 .track audio { width: 100%; height: 32px; color-scheme: dark; }
-@media (max-width: 560px) {
-  .track { grid-template-columns: 1fr; gap: 6px; }
-}
+@media (max-width: 560px) { .track { grid-template-columns: 1fr; gap: 6px; } }
 
 /* ---------- set lists ---------- */
 .setlist { margin-bottom: 36px; max-width: var(--measure); }
 .setlist h3 { margin: 0 0 4px; font-size: 20px; font-weight: 700; font-stretch: 108%; }
-.setlist .note { margin: 0 0 12px; color: var(--dust-dim); font-size: 15px; }
+.setlist .note { margin: 0 0 12px; color: var(--cream-dim); font-size: 15px; }
 .setlist ol { margin: 0; padding-left: 1.6em; columns: 2; column-gap: 32px; }
 .setlist li { break-inside: avoid; padding: 3px 0; }
 @media (max-width: 560px) { .setlist ol { columns: 1; } }
 
 /* ---------- session archive (band room) ---------- */
-.hint { color: var(--dust-dim); font-size: 15px; max-width: var(--measure); margin: 0 0 18px; }
-.hint code { font-size: 14px; color: var(--dust); }
+.hint { color: var(--cream-dim); font-size: 15px; max-width: var(--measure); margin: 0 0 18px; }
+.hint code, .prose code { font-size: 14px; color: var(--cream); background: var(--panel); padding: 1px 5px; border-radius: 3px; }
 .archive { list-style: none; margin: 0; padding: 0; max-width: 46rem; columns: 2; column-gap: 48px; }
-.archive .year { break-after: avoid; column-span: none; font-size: 28px; font-weight: 800; font-stretch: 118%; letter-spacing: -0.02em; color: var(--dust); padding: 18px 0 8px; }
+.archive .year { break-after: avoid; font-size: 28px; font-weight: 800; font-stretch: 118%; letter-spacing: -0.02em; color: var(--gold); padding: 18px 0 8px; }
 .archive .year:first-child { padding-top: 0; }
-.archive .sess { break-inside: avoid; display: grid; grid-template-columns: 4.2rem 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid rgba(179, 56, 44, 0.22); }
-.archive .sess .d { color: var(--ice); font-variant-numeric: tabular-nums; }
-.archive .sess a { color: var(--dust); }
-.archive .sess.is-show a { color: var(--ice); font-weight: 600; }
+.archive .sess { break-inside: avoid; display: grid; grid-template-columns: 4.2rem 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--rule-soft); }
+.archive .sess .d { color: var(--cream-dim); font-variant-numeric: tabular-nums; }
+.archive .sess a { color: var(--cream); }
+.archive .sess.is-show a { color: var(--magenta); font-weight: 700; }
+.archive .sess.is-show a:hover { color: var(--gold); }
 @media (max-width: 640px) { .archive { columns: 1; } }
 
 /* ---------- calendar ---------- */
-.calendar iframe { width: 100%; height: 620px; border: 0; border-radius: 6px; background: var(--night); }
-.calendar .hint { color: var(--dust-dim); font-size: 15px; max-width: var(--measure); }
+.calendar iframe { width: 100%; height: 620px; border: 0; border-radius: 6px; background: var(--panel); }
 
 /* ---------- art gallery ---------- */
 .gallery { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
@@ -240,15 +199,32 @@ details.past-shows[open] summary::before { content: "– "; }
 .links { display: flex; flex-wrap: wrap; gap: 10px 26px; padding: 0; margin: 0; list-style: none; font-size: 17px; }
 footer {
   padding: 64px var(--gutter) 40px;
-  color: var(--dust-dim);
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+  color: var(--cream-dim); font-size: 14px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
 }
 
-/* band room header */
+/* ---------- band room ---------- */
 .room-head { padding: 24px var(--gutter) 0; }
-.room-head h1 { margin: 0; font-size: clamp(40px, 8vw, 96px); font-weight: 900; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; text-transform: uppercase; }
-.room-head p { color: var(--dust-dim); max-width: var(--measure); }
+.room-head h1 { margin: 0; font-size: clamp(40px, 8vw, 96px); font-weight: 900; font-stretch: 125%; letter-spacing: -0.03em; line-height: 0.95; text-transform: uppercase; color: var(--gold); }
+.room-head p { color: var(--cream-dim); max-width: var(--measure); }
+
+/* login gate */
+.gate {
+  min-height: 100svh; display: grid; place-items: center; padding: 24px var(--gutter);
+  background:
+    radial-gradient(60% 50% at 20% 100%, rgba(226,58,142,0.25), transparent 70%),
+    radial-gradient(50% 40% at 90% 10%, rgba(69,205,232,0.18), transparent 70%),
+    var(--deep);
+}
+.gate form { width: min(420px, 100%); text-align: center; }
+.gate img.mark { width: 150px; height: auto; margin: 0 auto 8px; display: block; }
+.gate h1 { margin: 0 0 6px; font-size: 28px; font-weight: 800; font-stretch: 118%; letter-spacing: -0.02em; color: var(--gold); }
+.gate p { margin: 0 0 22px; color: var(--cream-dim); font-size: 15px; }
+.gate .row { display: flex; gap: 8px; }
+.gate input[type="password"] {
+  flex: 1; min-width: 0; padding: 12px 14px; font: inherit; font-size: 17px;
+  background: var(--panel); color: var(--cream); border: 1.5px solid var(--rule); border-radius: 8px;
+}
+.gate input[type="password"]:focus { outline: none; border-color: var(--cyan); }
+.gate label.remember { display: block; margin-top: 14px; font-size: 14px; color: var(--cream-dim); }
+.gate .error { color: var(--magenta); font-size: 15px; min-height: 1.4em; margin-top: 12px; }

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Update the band room — Large Martian</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="icon" type="image/png" href="../img/favicon.png">
+  <style>
+    main { max-width: 56rem; margin: 0 auto; padding: 32px var(--gutter) 80px; }
+    h1 { font-size: 32px; font-weight: 800; font-stretch: 118%; letter-spacing: -0.02em; color: var(--gold); margin: 0 0 8px; }
+    .step { margin: 32px 0; padding-top: 20px; border-top: 1px solid var(--rule); }
+    .step h2 { font-size: 17px; color: var(--cream); border: 0; padding: 0; margin: 0 0 10px; }
+    label { display: block; font-size: 14px; color: var(--cream-dim); margin: 12px 0 6px; }
+    input[type="password"], textarea { width: 100%; font: inherit; background: var(--panel); color: var(--cream); border: 1.5px solid var(--rule); border-radius: 8px; padding: 10px 12px; }
+    textarea { min-height: 420px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; line-height: 1.45; tab-size: 2; }
+    input:focus, textarea:focus { outline: none; border-color: var(--cyan); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    .msg { font-size: 15px; margin-top: 10px; min-height: 1.4em; }
+    .msg.bad { color: var(--magenta); } .msg.good { color: var(--cyan); }
+    ol.how { padding-left: 1.4em; color: var(--cream-dim); } ol.how li { margin: 6px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <p><a href="./">← Band room</a></p>
+  <h1>Update the band room</h1>
+  <p class="hint" style="max-width:none">The band room's contents are stored encrypted. This page unlocks them in your browser, lets you edit, and gives you a new encrypted file to upload. Nothing you type here leaves your computer.</p>
+
+  <div class="step">
+    <h2>1. Unlock</h2>
+    <label for="pw1">Current band password</label>
+    <input type="password" id="pw1" autocomplete="off">
+    <div class="row"><button class="btn" id="unlock">Unlock and load</button><span class="msg" id="m1"></span></div>
+  </div>
+
+  <div class="step">
+    <h2>2. Edit</h2>
+    <p class="hint" style="max-width:none">Plain JSON. The usual edits:</p>
+    <ol class="how">
+      <li><strong>Calendar:</strong> set <code>"calendar"</code> to the Google Calendar embed URL (Calendar settings → Integrate calendar → copy the <code>src="…"</code> part of the embed code) and <code>"calendarLink"</code> to its share link.</li>
+      <li><strong>New session:</strong> add <code>{ "date": "YYYY-MM-DD", "title": "Practice", "url": "…drive folder link…" }</code> to <code>"archive"</code>. Add <code>"kind": "show"</code> for a gig.</li>
+      <li><strong>Set list:</strong> add <code>{ "title": "…", "note": "…", "songs": ["…", "…"] }</code> to <code>"setlists"</code>.</li>
+    </ol>
+    <label for="json">band.json</label>
+    <textarea id="json" spellcheck="false" placeholder="Unlock first, or paste a band.json here."></textarea>
+    <div class="msg" id="m2"></div>
+  </div>
+
+  <div class="step">
+    <h2>3. Lock and download</h2>
+    <label for="pw2">Password to lock with (leave blank to keep the current one)</label>
+    <input type="password" id="pw2" autocomplete="new-password">
+    <div class="row"><button class="btn" id="lock">Lock and download band.enc.json</button><span class="msg" id="m3"></span></div>
+    <p class="hint" style="max-width:none;margin-top:16px">Then upload it: go to <a href="https://github.com/Ethan-Brooke/largemartian.com/tree/main/band" target="_blank" rel="noopener">the band folder on GitHub</a> → Add file → Upload files → drop in <code>band.enc.json</code> (it replaces the old one) → Commit. Live in about a minute. If you changed the password, tell the band.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  const b64 = { to: b => btoa(String.fromCharCode(...new Uint8Array(b))), from: s => Uint8Array.from(atob(s), c => c.charCodeAt(0)) };
+  const ITER = 250000;
+  let currentPw = '';
+
+  async function key(password, salt, iterations, usages) {
+    const base = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, usages);
+  }
+  const say = (id, text, cls) => { const el = document.getElementById(id); el.textContent = text; el.className = 'msg ' + (cls || ''); };
+
+  document.getElementById('unlock').addEventListener('click', async () => {
+    say('m1', 'Unlocking…');
+    try {
+      const blob = await (await fetch('band.enc.json', { cache: 'no-store' })).json();
+      const pw = document.getElementById('pw1').value;
+      const k = await key(pw, b64.from(blob.salt), blob.iterations, ['decrypt']);
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64.from(blob.iv) }, k, b64.from(blob.ct));
+      document.getElementById('json').value = JSON.stringify(JSON.parse(dec.decode(pt)), null, 2);
+      currentPw = pw;
+      say('m1', 'Unlocked. Edit below.', 'good');
+    } catch (e) { say('m1', 'Wrong password, or band.enc.json could not be loaded.', 'bad'); }
+  });
+
+  document.getElementById('json').addEventListener('input', () => {
+    try { JSON.parse(document.getElementById('json').value); say('m2', 'Valid JSON.', 'good'); }
+    catch (e) { say('m2', 'Not valid JSON yet: ' + e.message, 'bad'); }
+  });
+
+  document.getElementById('lock').addEventListener('click', async () => {
+    let data;
+    try { data = JSON.parse(document.getElementById('json').value); }
+    catch (e) { say('m3', 'Fix the JSON first.', 'bad'); return; }
+    const pw = document.getElementById('pw2').value || currentPw;
+    if (!pw) { say('m3', 'Enter a password to lock with.', 'bad'); return; }
+    say('m3', 'Locking…');
+    const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+    const k = await key(pw, salt, ITER, ['encrypt']);
+    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, k, enc.encode(JSON.stringify(data)));
+    const out = JSON.stringify({ v: 1, kdf: 'PBKDF2-SHA256', iterations: ITER, salt: b64.to(salt), iv: b64.to(iv), ct: b64.to(ct) });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([out], { type: 'application/json' }));
+    a.download = 'band.enc.json'; a.click();
+    say('m3', 'Downloaded band.enc.json — now upload it to GitHub (step below).', 'good');
+  });
+})();
+</script>
+</body>
+</html>
