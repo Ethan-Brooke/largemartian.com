@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Large Martian</title>
-  <meta name="description" content="Large Martian — upcoming shows, recordings, and where to find the band.">
+  <meta name="description" content="Large Martian — Marin County rock band. Upcoming shows, recordings, and where to find us.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232a0f0f'/%3E%3Ccircle cx='21' cy='23' r='13' fill='%23b3382c'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/favicon.png">
+  <meta property="og:title" content="Large Martian">
+  <meta property="og:description" content="Marin County rock band. Shows, recordings, and where to find us.">
+  <meta property="og:image" content="https://largemartian.com/img/cover.jpg">
 </head>
 <body>
 
 <header class="top">
-  <span class="wordmark">Large Martian</span>
+  <a class="wordmark" href="#"><img src="img/head.png" alt="" width="28" height="25"> Large Martian</a>
   <nav>
     <a href="#shows">Shows</a>
     <a href="#listen">Listen</a>
@@ -24,9 +28,12 @@
 
 <section class="hero" aria-label="Large Martian">
   <div class="planet" aria-hidden="true"></div>
+  <img class="alien" src="img/head.png" alt="" aria-hidden="true">
   <h1><span>Large</span><span>Martian</span></h1>
-  <p class="tag">Loud, familiar songs played by people who mean it. <a href="#shows">Next show ↓</a></p>
+  <p class="tag">Marin County's own extraterrestrial rock band. Bowie, Neil Young, Radiohead, Tom Petty, the Pixies and more, played loud. <a href="#shows">Next show ↓</a></p>
 </section>
+
+<div class="strip" aria-hidden="true"><img src="img/cover.jpg" alt=""></div>
 
 <section id="shows">
   <h2>Shows</h2>
@@ -46,10 +53,18 @@
 <section id="about">
   <h2>About</h2>
   <div class="prose">
-    <p>Large Martian is a rock band out of Northern California. Covers you know, played the way we'd want to hear them.</p>
+    <p>Large Martian is a rock band from Marin County, California — San Anselmo and Fairfax are home turf. We play the songs we grew up on: David Bowie, Neil Young, Jimi Hendrix, the Velvet Underground, Radiohead, the Pixies, Tom Petty, Wilco, Gillian Welch, Old Crow Medicine Show, Bob Dylan, the Rolling Stones, Billy Idol, Joan Jett, the Cure, Simple Minds, Rihanna.</p>
     <p>Booking and everything else: <a href="mailto:brooke.ethan@gmail.com">brooke.ethan@gmail.com</a></p>
   </div>
   <ul class="links" id="social-links"></ul>
+  <ul class="gallery" aria-label="Artwork">
+    <li><img src="img/art-1.jpg" alt="Large Martian artwork" loading="lazy"></li>
+    <li><img src="img/art-2.jpg" alt="Large Martian artwork" loading="lazy"></li>
+    <li><img src="img/art-3.jpg" alt="Large Martian artwork" loading="lazy"></li>
+    <li><img src="img/art-4.jpg" alt="Large Martian artwork" loading="lazy"></li>
+    <li><img src="img/art-5.jpg" alt="Large Martian artwork" loading="lazy"></li>
+    <li><img src="img/art-6.jpg" alt="Large Martian artwork" loading="lazy"></li>
+  </ul>
 </section>
 
 <footer>
@@ -78,7 +93,8 @@
         ${s.city ? `<span class="city">${s.city}</span>` : ''}
         ${(s.time || s.note) ? `<div class="meta">${[s.time, s.note].filter(Boolean).join(' — ')}</div>` : ''}
       </div>
-      ${(!past && s.tickets) ? `<a class="tickets" href="${s.tickets}" target="_blank" rel="noopener">Tickets</a>` : ''}`;
+      ${(!past && s.tickets) ? `<a class="tickets" href="${s.tickets}" target="_blank" rel="noopener">Tickets</a>` : ''}
+      ${s.poster ? `<a class="poster" href="${s.poster}" target="_blank" rel="noopener"><img src="${s.poster}" alt="Poster: ${s.venue}, ${s.date}" loading="lazy"></a>` : ''}`;
     return li;
   }
 
@@ -92,6 +108,7 @@
     document.getElementById('no-shows').hidden = up.length > 0;
     if (past.length) {
       document.getElementById('past-wrap').hidden = false;
+      if (!up.length) document.getElementById('past-wrap').open = true;
       const pEl = document.getElementById('past');
       past.forEach(s => pEl.appendChild(showRow(s, true)));
     }

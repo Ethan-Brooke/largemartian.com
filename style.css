@@ -48,7 +48,8 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   padding: 18px var(--gutter);
   font-size: 15px;
 }
-.top .wordmark { color: var(--dust); font-weight: 700; font-stretch: 110%; }
+.top .wordmark { color: var(--dust); font-weight: 700; font-stretch: 110%; display: inline-flex; align-items: center; gap: 10px; }
+.top .wordmark img { width: 28px; height: auto; opacity: 0.92; }
 .top nav { display: flex; gap: 22px; }
 .top nav a { color: var(--dust-dim); }
 .top nav a:hover { color: var(--dust); }
@@ -87,6 +88,19 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
 }
 .hero .tag a { white-space: nowrap; }
 
+/* the alien: the band's mark, rising with the planet */
+.alien {
+  position: absolute;
+  right: clamp(16px, 5vw, 80px);
+  top: 4vh;
+  width: clamp(120px, 19vw, 300px);
+  height: auto;
+  opacity: 0.9;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero h1 { position: relative; z-index: 1; }
+
 /* the planet: rises from the lower right, half off-screen */
 .planet {
   position: absolute;
@@ -105,10 +119,16 @@ a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 0.
   .planet { right: -14vw; bottom: -58vw; width: 78vw; height: 78vw; }
 }
 @media (max-width: 640px) {
-  .hero { min-height: 0; padding-top: 14vh; }
-  .hero h1 { font-size: 21vw; }
+  .hero { min-height: 0; padding-top: 22vh; }
+  .hero h1 { font-size: 18.5vw; }
+  .hero h1 span + span { margin-left: 0.15em; }
   .planet { right: -30vw; bottom: -60vw; width: 120vw; height: 120vw; }
+  .alien { width: 38vw; right: 5vw; top: 5vh; }
 }
+
+/* ---------- cover strip ---------- */
+.strip { width: 100%; height: clamp(180px, 34vw, 520px); overflow: hidden; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--night); }
+.strip img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; display: block; }
 
 /* ---------- sections ---------- */
 section { padding: 56px var(--gutter) 24px; }
@@ -150,7 +170,10 @@ section h2 {
   white-space: nowrap;
 }
 .show .tickets:hover { background: var(--ice); color: var(--night); text-decoration: none; }
-.show.past { opacity: 0.55; }
+.show .poster { grid-column: 3; grid-row: 1 / span 2; justify-self: end; align-self: start; }
+.show .poster img { width: 96px; height: auto; display: block; border-radius: 3px; box-shadow: 0 2px 12px rgba(0,0,0,0.4); transition: transform .15s ease; }
+.show .poster:hover img { transform: scale(1.04); }
+.show.past .date, .show.past .where { opacity: 0.72; }
 .show.past .date { color: var(--dust); }
 .empty { color: var(--dust-dim); max-width: var(--measure); padding: 8px 0 24px; }
 details.past-shows { margin-top: 24px; }
@@ -162,6 +185,7 @@ details.past-shows[open] summary::before { content: "– "; }
   .show { grid-template-columns: 4.2rem 1fr; }
   .show .date .day { font-size: 36px; }
   .show .tickets { grid-column: 2; justify-self: start; margin-top: 12px; }
+  .show .poster { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 12px; }
 }
 
 /* ---------- tracks (public listen + band recordings) ---------- */
@@ -191,9 +215,26 @@ details.past-shows[open] summary::before { content: "– "; }
 .setlist li { break-inside: avoid; padding: 3px 0; }
 @media (max-width: 560px) { .setlist ol { columns: 1; } }
 
+/* ---------- session archive (band room) ---------- */
+.hint { color: var(--dust-dim); font-size: 15px; max-width: var(--measure); margin: 0 0 18px; }
+.hint code { font-size: 14px; color: var(--dust); }
+.archive { list-style: none; margin: 0; padding: 0; max-width: 46rem; columns: 2; column-gap: 48px; }
+.archive .year { break-after: avoid; column-span: none; font-size: 28px; font-weight: 800; font-stretch: 118%; letter-spacing: -0.02em; color: var(--dust); padding: 18px 0 8px; }
+.archive .year:first-child { padding-top: 0; }
+.archive .sess { break-inside: avoid; display: grid; grid-template-columns: 4.2rem 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid rgba(179, 56, 44, 0.22); }
+.archive .sess .d { color: var(--ice); font-variant-numeric: tabular-nums; }
+.archive .sess a { color: var(--dust); }
+.archive .sess.is-show a { color: var(--ice); font-weight: 600; }
+@media (max-width: 640px) { .archive { columns: 1; } }
+
 /* ---------- calendar ---------- */
 .calendar iframe { width: 100%; height: 620px; border: 0; border-radius: 6px; background: var(--night); }
 .calendar .hint { color: var(--dust-dim); font-size: 15px; max-width: var(--measure); }
+
+/* ---------- art gallery ---------- */
+.gallery { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; border-radius: 3px; }
+@media (max-width: 800px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
 
 /* ---------- socials / footer ---------- */
 .links { display: flex; flex-wrap: wrap; gap: 10px 26px; padding: 0; margin: 0; list-style: none; font-size: 17px; }

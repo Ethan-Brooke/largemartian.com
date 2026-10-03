@@ -1,6 +1,33 @@
 {
-  "_how_to": "Add a show as a new object in the list. Dates are YYYY-MM-DD. Upcoming shows show at the top of the homepage; past ones move to 'Past shows' automatically. 'tickets' and 'time' are optional. Keep the JSON valid (commas between items, no trailing comma).",
+  "_how_to": "Add a show as a new object in the list. Dates are YYYY-MM-DD. Upcoming shows show at the top of the homepage; past ones move to 'Past shows' automatically. 'time', 'tickets', 'note' and 'poster' (path to an image in img/) are optional. Keep the JSON valid (commas between items, no trailing comma).",
   "shows": [
+    {
+      "date": "2025-11-07",
+      "venue": "Peri's — on the patio",
+      "city": "Fairfax, CA",
+      "time": "5pm",
+      "tickets": "",
+      "note": "29 Broadway",
+      "poster": "img/poster-peris-2025-11-07.jpg"
+    },
+    {
+      "date": "2025-09-25",
+      "venue": "Dugout Bar",
+      "city": "San Anselmo, CA",
+      "time": "7pm",
+      "tickets": "",
+      "note": "20 Veterans Place",
+      "poster": "img/poster-dugout-2025-09-25.jpg"
+    },
+    {
+      "date": "2025-03-06",
+      "venue": "Dugout Bar",
+      "city": "San Anselmo, CA",
+      "time": "7pm",
+      "tickets": "",
+      "note": "20 Veterans Place",
+      "poster": "img/poster-dugout-2025-03-06.jpg"
+    },
     {
       "date": "2024-04-20",
       "venue": "T's Mom's",

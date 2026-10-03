@@ -1,109 +1,543 @@
 {
-  "_how_to": "Band-only page data. 'calendar' is the Google Calendar embed URL (Calendar settings > Integrate calendar > Embed code; paste just the src URL). Recordings: 'base' + 'file' is the MP3 URL. Set lists: songs in order.",
+  "_how_to": "Band-only page data. 'calendar' is the Google Calendar embed URL (Calendar settings > Integrate calendar > Embed code; paste just the src URL). Recordings: 'base' + 'file' is the MP3 URL. Set lists: songs in order. 'archive' lists the shared Google Drive session folders (date, title, url, kind 'show' or '').",
   "calendar": "",
+  "archiveRoot": "https://drive.google.com/drive/folders/1pr_rnvBLkF5meNYvgkLxQiinMC-GIkqx",
+  "archive": [
+    {
+      "date": "2026-02-25",
+      "title": "Peri's, Feb 2026 (single recording)",
+      "url": "https://drive.google.com/file/d/1TGaAWl6Nmw_YRi6E89iNaklQNMwkW7Oe/view",
+      "kind": "show"
+    },
+    {
+      "date": "2026-01-15",
+      "title": "Live show",
+      "url": "https://drive.google.com/drive/folders/1Jw33J7VeKaPhdnLRDhAn8CflHpK0IWaA",
+      "kind": "show"
+    },
+    {
+      "date": "2026-01-11",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1o5ap2NQqufrvThDAAMOzUkpStMK8pJJQ"
+    },
+    {
+      "date": "2026-01-10",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1m6d85IIDSRceYudE-gINeLsaA6minM7a"
+    },
+    {
+      "date": "2025-12-14",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1bZC9xGCt_JBAozetxaTxWU9Prg8T1YJZ"
+    },
+    {
+      "date": "2025-12-07",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1JzKr87XNngFyhxiJe4A9jLVUsITfSHwz"
+    },
+    {
+      "date": "2025-11-29",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1LLGxp94g1vD-XEP1boQbMcUsxEyjnruU"
+    },
+    {
+      "date": "2025-11-11",
+      "title": "Peri's",
+      "url": "https://drive.google.com/drive/folders/1-w2gLj-NDkx2seppfclw7H1rbR0vGThs",
+      "kind": "show"
+    },
+    {
+      "date": "2025-11-05",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1tvl5BkJ6-LaqYiSbkhDJR0h7Kua1AGkU"
+    },
+    {
+      "date": "2025-11-04",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/13W1JDMvJ_JNex7Bq5Erl6UOtqwS0MYWr"
+    },
+    {
+      "date": "2025-10-19",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1eVC_1J2b7_2-yxUs8o64LGdcMBGwJsSN"
+    },
+    {
+      "date": "2025-10-12",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1zTA26_or9KU3TBpbNTK6fiAM7YLCd1-m"
+    },
+    {
+      "date": "2025-10-05",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1RnLp8h0fg2VZu0hSnUCICAAbpdWGAOlM"
+    },
+    {
+      "date": "2025-09-25",
+      "title": "Live show — media",
+      "url": "https://drive.google.com/drive/folders/1UR8vRrjhbcAuRhN9rrcgqi1Ra21nrK-5",
+      "kind": "show"
+    },
+    {
+      "date": "2025-09-23",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1ZC3xffYTRwddVUuJudQp0j4nFbRz1Jwp"
+    },
+    {
+      "date": "2025-09-21",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1VrF_5sMqSi4yI-j-sPMcWVR3P0_k14aa"
+    },
+    {
+      "date": "2025-08-24",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1QU-c28Swx-LADRF3VmteYlrLkZxMCSiL"
+    },
+    {
+      "date": "2025-07-13",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1FhTLXoPbiOArjJNR08AIms7y4OzXszsx"
+    },
+    {
+      "date": "2025-07-06",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1UTTJnxqFwkKQk_pMlTR6IrojMFPS2lCm"
+    },
+    {
+      "date": "2025-06-25",
+      "title": "Keyboard session",
+      "url": "https://drive.google.com/drive/folders/1JW1bDZaAieQcV5trGf4yNLWtg_dDo6s3"
+    },
+    {
+      "date": "2025-06-22",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1iIWR0O-FDYEyIE2pE6NexBIYvkDeEQhA"
+    },
+    {
+      "date": "2025-06-22",
+      "title": "Practice — audio only",
+      "url": "https://drive.google.com/drive/folders/10yzk0rWwwamSNx_fpJ1dasVNDvwN_7SB"
+    },
+    {
+      "date": "2025-06-15",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1gtG802n2lbLDzIGBgWge8zqxIVFs0nqi"
+    },
+    {
+      "date": "2025-06-08",
+      "title": "Practice — audio",
+      "url": "https://drive.google.com/drive/folders/1ZVSEkLRKN1DQi8fIw4YtsGBZ3F8V1CWG"
+    },
+    {
+      "date": "2025-05-27",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1neuXm1N61o2vJtCzWGQBoJ4TMvAdJirj"
+    },
+    {
+      "date": "2025-05-27",
+      "title": "Practice — audio",
+      "url": "https://drive.google.com/drive/folders/1X1iHjG6UjYFxrUqEZI01oHS1anfET-MD"
+    },
+    {
+      "date": "2025-05-04",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1KpBediC3RgUpjynPm9iae1x5i-9vBzxk"
+    },
+    {
+      "date": "2025-05-04",
+      "title": "Practice — audio",
+      "url": "https://drive.google.com/drive/folders/1hmK_ZJppfcTFfrCBXDPKzdFQ4AryIkOc"
+    },
+    {
+      "date": "2025-04-27",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1-KBduUCQOgkQ320fKpae-XjjUE-9hxMA"
+    },
+    {
+      "date": "2025-04-19",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1zIb4n0YUsAtbHfJCR4MM6J3b2X-4b-9-"
+    },
+    {
+      "date": "2025-03-30",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1KCFN5s4qz2eCk7ev3XsLh2K-ZhcQMPvA"
+    },
+    {
+      "date": "2025-03-30",
+      "title": "Practice — audio",
+      "url": "https://drive.google.com/drive/folders/1DlB6qbieYwXqt10eX4O6vurqmAGbDNil"
+    },
+    {
+      "date": "2025-03-23",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1-HfelHLoAjB0s0kH3D1h1KmscUhT0Uy-"
+    },
+    {
+      "date": "2025-03-23",
+      "title": "Practice — audio",
+      "url": "https://drive.google.com/drive/folders/1-zCPE7fkbET5IB8bSNTef7BkMNfW4f9R"
+    },
+    {
+      "date": "2025-03-12",
+      "title": "Practice — audio",
+      "url": "https://drive.google.com/drive/folders/1oVNZNORBal8qxAjIILk3OxiVguqKfpjG"
+    },
+    {
+      "date": "2025-03-06",
+      "title": "Live show",
+      "url": "https://drive.google.com/drive/folders/1xvKhGQJAKEj3dZdROgnJ1FpwtedVSsox",
+      "kind": "show"
+    },
+    {
+      "date": "2025-03-02",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1tdEJ9e6w0uke-JiZUvKYF4dr47hYL60B"
+    },
+    {
+      "date": "2025-02-27",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1unInFWqKKZNMqlAOrquANtvlkCANDnIi"
+    },
+    {
+      "date": "2025-02-23",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1q1assfR7rhahGXNPY92DILznd0k3hTnq"
+    },
+    {
+      "date": "2025-02-09",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1vMLFShCpGWOgUbFA4Bv5mBoZ2KfDC9fb"
+    },
+    {
+      "date": "2024-12-15",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1vDFXKjG2wkPLbYmNYeSS-CicA4_aJQRE"
+    },
+    {
+      "date": "2024-12-10",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1ySl4A5IcRJqSWod0sOkyWY3AefGGz0a3"
+    },
+    {
+      "date": "2024-11-18",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1dy6TJjJGqmydFsgltjauXxJ3z6rLNZiI"
+    },
+    {
+      "date": "2024-11-11",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1ZilIU5x3nT_v1Hl690Gc-gwoLjqoFQSD"
+    },
+    {
+      "date": "2024-10-29",
+      "title": "Practice",
+      "url": "https://drive.google.com/drive/folders/1pfkfjOAvETgQBu7UyidOQvOAi6IR6Uh1"
+    }
+  ],
   "base": "https://ethan-brooke.github.io/largemartian-audio/",
   "recordings": [
     {
       "title": "Practice — May 27, 2025",
       "folder": "2025-05-27",
       "tracks": [
-        { "title": "Five Years", "file": "Five Years.mp3" },
-        { "title": "Oh Sweet Nothing", "file": "Oh Sweet Nothing.mp3" },
-        { "title": "Peaceful Easy Feeling", "file": "Peaceful Easy Feeling.mp3" },
-        { "title": "Where Is My Mind", "file": "Where is My Mind.mp3" }
+        {
+          "title": "Five Years",
+          "file": "Five Years.mp3"
+        },
+        {
+          "title": "Oh Sweet Nothing",
+          "file": "Oh Sweet Nothing.mp3"
+        },
+        {
+          "title": "Peaceful Easy Feeling",
+          "file": "Peaceful Easy Feeling.mp3"
+        },
+        {
+          "title": "Where Is My Mind",
+          "file": "Where is My Mind.mp3"
+        }
       ]
     },
     {
       "title": "Practice — May 4, 2025",
       "folder": "2025-05-04",
       "tracks": [
-        { "title": "Five Years", "file": "5 years.mp3" },
-        { "title": "Come As You Are", "file": "come as you are.mp3" },
-        { "title": "Come As You Are (take 2)", "file": "come as you are 2.mp3" },
-        { "title": "Don't You Forget About Me", "file": "Dont you forget about me.mp3" },
-        { "title": "Hallelujah", "file": "Hallelujah.mp3" },
-        { "title": "Just Like Heaven", "file": "just like Heaven.mp3" },
-        { "title": "Keep On Rockin' in the Free World", "file": "keep on rockin in the free world.mp3" },
-        { "title": "Love on the Brain", "file": "love on the brain.mp3" },
-        { "title": "Mary Jane's Last Dance", "file": "Mary Jane.mp3" },
-        { "title": "Miss Ohio", "file": "Miss Ohio.mp3" },
-        { "title": "Out on the Weekend", "file": "out on the weekend.mp3" },
-        { "title": "I Wanna Be Sedated", "file": "Sedated.mp3" },
-        { "title": "I Wanna Be Sedated (take 2)", "file": "sedated 2.mp3" },
-        { "title": "Takin' Care of Business", "file": "taking care of business.mp3" },
-        { "title": "When the Roses Bloom Again", "file": "when the roses bloom again.mp3" },
-        { "title": "Where Is My Mind", "file": "where is my mind.mp3" }
+        {
+          "title": "Five Years",
+          "file": "5 years.mp3"
+        },
+        {
+          "title": "Come As You Are",
+          "file": "come as you are.mp3"
+        },
+        {
+          "title": "Come As You Are (take 2)",
+          "file": "come as you are 2.mp3"
+        },
+        {
+          "title": "Don't You Forget About Me",
+          "file": "Dont you forget about me.mp3"
+        },
+        {
+          "title": "Hallelujah",
+          "file": "Hallelujah.mp3"
+        },
+        {
+          "title": "Just Like Heaven",
+          "file": "just like Heaven.mp3"
+        },
+        {
+          "title": "Keep On Rockin' in the Free World",
+          "file": "keep on rockin in the free world.mp3"
+        },
+        {
+          "title": "Love on the Brain",
+          "file": "love on the brain.mp3"
+        },
+        {
+          "title": "Mary Jane's Last Dance",
+          "file": "Mary Jane.mp3"
+        },
+        {
+          "title": "Miss Ohio",
+          "file": "Miss Ohio.mp3"
+        },
+        {
+          "title": "Out on the Weekend",
+          "file": "out on the weekend.mp3"
+        },
+        {
+          "title": "I Wanna Be Sedated",
+          "file": "Sedated.mp3"
+        },
+        {
+          "title": "I Wanna Be Sedated (take 2)",
+          "file": "sedated 2.mp3"
+        },
+        {
+          "title": "Takin' Care of Business",
+          "file": "taking care of business.mp3"
+        },
+        {
+          "title": "When the Roses Bloom Again",
+          "file": "when the roses bloom again.mp3"
+        },
+        {
+          "title": "Where Is My Mind",
+          "file": "where is my mind.mp3"
+        }
       ]
     },
     {
       "title": "Practice — March 30, 2025",
       "folder": "2025-03-30",
       "tracks": [
-        { "title": "Five Years", "file": "5 Years.mp3" },
-        { "title": "Colors", "file": "colors.mp3" },
-        { "title": "Come As You Are", "file": "come as you are.mp3" },
-        { "title": "Cortez the Killer", "file": "cortez.mp3" },
-        { "title": "Don't You Forget About Me", "file": "dont you forget about me.mp3" },
-        { "title": "I Hate Myself for Loving You", "file": "hate myself for loving you.mp3" },
-        { "title": "Knockin' on Heaven's Door", "file": "heavens door.mp3" },
-        { "title": "Hey Joe", "file": "hey joe.mp3" },
-        { "title": "Love on the Brain", "file": "love on the brain.mp3" },
-        { "title": "Mary Jane's Last Dance", "file": "maryjanes last dance.mp3" },
-        { "title": "I Melt With You", "file": "melt with you.mp3" },
-        { "title": "Miss Ohio", "file": "miss ohio.mp3" },
-        { "title": "One", "file": "One.mp3" },
-        { "title": "Scratchy thing (idea)", "file": "Scratchy thing is cool.mp3" },
-        { "title": "Smells Like Teen Spirit", "file": "teen spirit.mp3" },
-        { "title": "Wagon Wheel", "file": "wagon wheel.mp3" },
-        { "title": "What's Going On", "file": "Whats Going On.mp3" },
-        { "title": "Where Is My Mind", "file": "Where is my mind.mp3" }
+        {
+          "title": "Five Years",
+          "file": "5 Years.mp3"
+        },
+        {
+          "title": "Colors",
+          "file": "colors.mp3"
+        },
+        {
+          "title": "Come As You Are",
+          "file": "come as you are.mp3"
+        },
+        {
+          "title": "Cortez the Killer",
+          "file": "cortez.mp3"
+        },
+        {
+          "title": "Don't You Forget About Me",
+          "file": "dont you forget about me.mp3"
+        },
+        {
+          "title": "I Hate Myself for Loving You",
+          "file": "hate myself for loving you.mp3"
+        },
+        {
+          "title": "Knockin' on Heaven's Door",
+          "file": "heavens door.mp3"
+        },
+        {
+          "title": "Hey Joe",
+          "file": "hey joe.mp3"
+        },
+        {
+          "title": "Love on the Brain",
+          "file": "love on the brain.mp3"
+        },
+        {
+          "title": "Mary Jane's Last Dance",
+          "file": "maryjanes last dance.mp3"
+        },
+        {
+          "title": "I Melt With You",
+          "file": "melt with you.mp3"
+        },
+        {
+          "title": "Miss Ohio",
+          "file": "miss ohio.mp3"
+        },
+        {
+          "title": "One",
+          "file": "One.mp3"
+        },
+        {
+          "title": "Scratchy thing (idea)",
+          "file": "Scratchy thing is cool.mp3"
+        },
+        {
+          "title": "Smells Like Teen Spirit",
+          "file": "teen spirit.mp3"
+        },
+        {
+          "title": "Wagon Wheel",
+          "file": "wagon wheel.mp3"
+        },
+        {
+          "title": "What's Going On",
+          "file": "Whats Going On.mp3"
+        },
+        {
+          "title": "Where Is My Mind",
+          "file": "Where is my mind.mp3"
+        }
       ]
     },
     {
       "title": "Practice — March 23, 2025",
       "folder": "2025-03-23",
       "tracks": [
-        { "title": "Basket Case", "file": "basketcase.mp3" },
-        { "title": "Come As You Are", "file": "come as you are.mp3" },
-        { "title": "Dancing With Myself", "file": "dancing with myself.mp3" },
-        { "title": "Don't You Forget About Me", "file": "Dont you forget about me.mp3" },
-        { "title": "Favorite Colors", "file": "Favorite Colors.mp3" },
-        { "title": "I'll Stop the World", "file": "Ill stop the world.mp3" },
-        { "title": "Love on the Brain", "file": "love on the brain.mp3" },
-        { "title": "Oh Sweet Nothing", "file": "oh sweet nothing.mp3" },
-        { "title": "Sexual Healing", "file": "sexual healing.mp3" },
-        { "title": "Smells Like Teen Spirit", "file": "smells like teen spirit.mp3" }
+        {
+          "title": "Basket Case",
+          "file": "basketcase.mp3"
+        },
+        {
+          "title": "Come As You Are",
+          "file": "come as you are.mp3"
+        },
+        {
+          "title": "Dancing With Myself",
+          "file": "dancing with myself.mp3"
+        },
+        {
+          "title": "Don't You Forget About Me",
+          "file": "Dont you forget about me.mp3"
+        },
+        {
+          "title": "Favorite Colors",
+          "file": "Favorite Colors.mp3"
+        },
+        {
+          "title": "I'll Stop the World",
+          "file": "Ill stop the world.mp3"
+        },
+        {
+          "title": "Love on the Brain",
+          "file": "love on the brain.mp3"
+        },
+        {
+          "title": "Oh Sweet Nothing",
+          "file": "oh sweet nothing.mp3"
+        },
+        {
+          "title": "Sexual Healing",
+          "file": "sexual healing.mp3"
+        },
+        {
+          "title": "Smells Like Teen Spirit",
+          "file": "smells like teen spirit.mp3"
+        }
       ]
     },
     {
       "title": "For public consumption — August 2024",
       "folder": "public",
       "tracks": [
-        { "title": "Creep", "file": "Creep.mp3" },
-        { "title": "Don't Look Back in Anger", "file": "Dont Look Back in Anger.mp3" },
-        { "title": "Lucky", "file": "Lucky.mp3" },
-        { "title": "Margaritaville", "file": "Margaritaville.mp3" },
-        { "title": "Mary Jane's Last Dance", "file": "Mary Janes Last Dance.mp3" },
-        { "title": "One", "file": "One.mp3" },
-        { "title": "Peaceful Easy Feeling", "file": "Peaceful Easy Feeling.mp3" },
-        { "title": "Fake Plastic Trees", "file": "Fake Plastic Trees.mp3" },
-        { "title": "R.O.C.K. in the U.S.A.", "file": "ROCK in the USA.mp3" },
-        { "title": "Take It Easy", "file": "Take It Easy.mp3" },
-        { "title": "Tuesday's Gone", "file": "Tuesdays Gone.mp3" },
-        { "title": "Wagon Wheel", "file": "Wagon Wheel.mp3" },
-        { "title": "Wild Horses", "file": "Wild Horses.mp3" }
+        {
+          "title": "Creep",
+          "file": "Creep.mp3"
+        },
+        {
+          "title": "Don't Look Back in Anger",
+          "file": "Dont Look Back in Anger.mp3"
+        },
+        {
+          "title": "Lucky",
+          "file": "Lucky.mp3"
+        },
+        {
+          "title": "Margaritaville",
+          "file": "Margaritaville.mp3"
+        },
+        {
+          "title": "Mary Jane's Last Dance",
+          "file": "Mary Janes Last Dance.mp3"
+        },
+        {
+          "title": "One",
+          "file": "One.mp3"
+        },
+        {
+          "title": "Peaceful Easy Feeling",
+          "file": "Peaceful Easy Feeling.mp3"
+        },
+        {
+          "title": "Fake Plastic Trees",
+          "file": "Fake Plastic Trees.mp3"
+        },
+        {
+          "title": "R.O.C.K. in the U.S.A.",
+          "file": "ROCK in the USA.mp3"
+        },
+        {
+          "title": "Take It Easy",
+          "file": "Take It Easy.mp3"
+        },
+        {
+          "title": "Tuesday's Gone",
+          "file": "Tuesdays Gone.mp3"
+        },
+        {
+          "title": "Wagon Wheel",
+          "file": "Wagon Wheel.mp3"
+        },
+        {
+          "title": "Wild Horses",
+          "file": "Wild Horses.mp3"
+        }
       ]
     },
     {
       "title": "New songs, solo — May 14, 2024",
       "folder": "2024-05-14-solo",
       "tracks": [
-        { "title": "Drunken", "file": "Drunken.mp3" },
-        { "title": "Green San Anselmo", "file": "Green San Anselmo.mp3" },
-        { "title": "Islands in the Sky", "file": "Islands in the sky 1.mp3" },
-        { "title": "Orchids", "file": "Orchids.mp3" },
-        { "title": "Took the Coke and the Money", "file": "Took the coke and the money.mp3" },
-        { "title": "Trailer", "file": "Trailer.mp3" }
+        {
+          "title": "Drunken",
+          "file": "Drunken.mp3"
+        },
+        {
+          "title": "Green San Anselmo",
+          "file": "Green San Anselmo.mp3"
+        },
+        {
+          "title": "Islands in the Sky",
+          "file": "Islands in the sky 1.mp3"
+        },
+        {
+          "title": "Orchids",
+          "file": "Orchids.mp3"
+        },
+        {
+          "title": "Took the Coke and the Money",
+          "file": "Took the coke and the money.mp3"
+        },
+        {
+          "title": "Trailer",
+          "file": "Trailer.mp3"
+        }
       ]
     }
   ],

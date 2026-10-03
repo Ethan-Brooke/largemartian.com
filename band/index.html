@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232a0f0f'/%3E%3Ccircle cx='21' cy='23' r='13' fill='%239fd8e6'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="../img/favicon.png">
 </head>
 <body>
 
@@ -17,7 +17,8 @@
   <a class="wordmark" href="../">Large Martian</a>
   <nav>
     <a href="#practice">Practice</a>
-    <a href="#recordings">Recordings</a>
+    <a href="#archive">Sessions</a>
+    <a href="#recordings">Tracks</a>
     <a href="#setlists">Set lists</a>
   </nav>
 </header>
@@ -32,8 +33,15 @@
   <div id="cal"></div>
 </section>
 
+<section id="archive">
+  <h2>Session archive</h2>
+  <p class="hint" id="archive-hint"></p>
+  <ul class="archive" id="arch"></ul>
+</section>
+
 <section id="recordings">
-  <h2>Recordings</h2>
+  <h2>Tracks</h2>
+  <p class="hint">Individual songs pulled out of practice sessions. Press play.</p>
   <div id="rec"></div>
 </section>
 
@@ -59,6 +67,25 @@
   } else {
     cal.innerHTML = `<p class="hint">No calendar linked yet. Make a shared Google Calendar called "Large Martian practice", share it with everyone in the band, then paste its embed URL into <code>band/band.json</code> under <code>calendar</code>.</p>`;
   }
+
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const arch = document.getElementById('arch');
+  const items = (data.archive || []).slice().sort((a,b) => b.date.localeCompare(a.date));
+  document.getElementById('archive-hint').innerHTML = items.length
+    ? `Every full practice and show recording, in the band's shared Google Drive. <a href="${data.archiveRoot}" target="_blank" rel="noopener">Open the whole folder</a> — new sessions go there; add a line to <code>band/band.json</code> to list them here.`
+    : 'No sessions listed yet.';
+  let lastYear = '';
+  items.forEach(s => {
+    const [y,m,d] = s.date.split('-').map(Number);
+    if (String(y) !== lastYear) {
+      lastYear = String(y);
+      const yr = document.createElement('li'); yr.className = 'year'; yr.textContent = y; arch.appendChild(yr);
+    }
+    const li = document.createElement('li');
+    li.className = 'sess' + (s.kind === 'show' ? ' is-show' : '');
+    li.innerHTML = `<span class="d">${MONTHS[m-1]} ${d}</span><a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>`;
+    arch.appendChild(li);
+  });
 
   const rec = document.getElementById('rec');
   (data.recordings || []).forEach(sess => {
