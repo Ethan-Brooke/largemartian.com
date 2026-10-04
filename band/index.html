@@ -194,7 +194,7 @@
       const weSlots = Array.isArray(s.slots.weekend) ? s.slots.weekend : [];
       const slotLabel = id => (weSlots.find(x => x.id === id) || {}).label || '';
       const days = monthDays();
-      const lead = (days[0].dow + 6) % 7; // Monday-first grid
+      const lead = days[0].dow; // Sunday-first grid, like Google Calendar
       const busyCount = (d, slot) => Object.entries(state.availability).filter(([who, dates]) => who !== me && (dates.includes(d) || (slot && dates.includes(d + '#' + slot)))).map(([who]) => who);
       const answered = Object.keys(state.availability).filter(n => s.members.some(x => x.name === n));
       const missing = s.members.map(x => x.name).filter(n => !answered.includes(n));
@@ -206,7 +206,7 @@
         </div>
         <p class="hint">Tap the days you <strong>can't</strong> make — on weekends, tap the sessions (or the date for the whole day) — then save. Gold = proposed practice${onCal ? ' (on the calendar)' : ''}.</p>
         <div class="grid">
-          ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<div class="gh">${d}</div>`).join('')}
+          ${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => `<div class="gh">${d}</div>`).join('')}
           ${'<div></div>'.repeat(lead)}
           ${days.map(d => {
             const isWe = d.dow === 0 || d.dow === 6;

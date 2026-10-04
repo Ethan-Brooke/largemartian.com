@@ -132,9 +132,9 @@ function monthDays_(month) { // month 'YYYY-MM' -> array of {date:'YYYY-MM-DD', 
   return out;
 }
 function nextMonth_(from) { var d = from || new Date(); var y = d.getFullYear(), m = d.getMonth() + 2; if (m > 12) { m = 1; y++; } return y + '-' + pad_(m); }
-function weekKey_(dateStr) { // weeks run Mon..Sun, so Sunday is the end of its week
+function weekKey_(dateStr) { // weeks run Sun..Sat, like the calendar grid; key = that week's Sunday
   var p = dateStr.split('-').map(Number); var d = new Date(p[0], p[1] - 1, p[2]);
-  var dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return ymd_(d);
+  d.setDate(d.getDate() - d.getDay()); return ymd_(d);
 }
 
 // ---------- the picker ----------
@@ -177,8 +177,7 @@ function buildSchedule_(month, settings, availability) {
   var picked = [];
   Object.keys(byWeek).sort().forEach(function (k) {
     // a week belongs to the month its Sunday falls in, so month edges aren't double-booked or orphaned
-    var wk = k.split('-').map(Number); var sun = new Date(wk[0], wk[1] - 1, wk[2] + 6);
-    if (ymd_(sun).slice(0, 7) !== month) return;
+    if (k.slice(0, 7) !== month) return;
     var cands = byWeek[k].filter(function (d) { return d.ok && d.rank < 99; }).sort(function (a, b) { return a.rank - b.rank || a.date.localeCompare(b.date); });
     var n = Math.min(Number(settings.practicesPerWeek) || 1, cands.length);
     var chosen = [];
