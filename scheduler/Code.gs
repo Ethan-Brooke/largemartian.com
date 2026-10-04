@@ -25,7 +25,15 @@ var TAG = '[LM-auto]';
 var DEFAULTS = {
   practicesPerWeek: 1,
   dayOrder: ['Sun', 'Wed', 'Thu', 'Tue', 'Fri', 'Mon', 'Sat'],
-  slots: { weekday: { start: '18:00', end: '21:00' }, weekend: { start: '10:00', end: '13:00' } },
+  slots: {
+    weekday: { start: '18:00', end: '21:00' },
+    // weekend sessions, in order of preference; people mark which of these they can't make
+    weekend: [
+      { id: 'am', label: 'Morning', start: '09:30', end: '12:00' },
+      { id: 'pm', label: 'Afternoon', start: '14:00', end: '17:00' },
+      { id: 'eve', label: 'Evening', start: '17:00', end: '20:00' }
+    ]
+  },
   pollDay: 1,
   deadlineDay: 7,
   noAnswer: 'available',          // 'available' | 'skip' (a non-responder blocks nothing / blocks everything)
@@ -55,6 +63,8 @@ function getSettings_() {
   try { s = raw ? JSON.parse(raw) : {}; } catch (e) { s = {}; }
   var out = JSON.parse(JSON.stringify(DEFAULTS));
   Object.keys(s).forEach(function (k) { out[k] = s[k]; });
+  if (!out.slots || !out.slots.weekday) out.slots = JSON.parse(JSON.stringify(DEFAULTS.slots));
+  if (!Array.isArray(out.slots.weekend)) out.slots.weekend = JSON.parse(JSON.stringify(DEFAULTS.slots.weekend));
   return out;
 }
 function saveSettings_(s) {
@@ -99,13 +109,13 @@ function saveAvailability_(month, member, dates) {
 function getSchedule_(month) {
   var sh = sheet_().getSheetByName('Schedule');
   return sh.getDataRange().getValues().filter(function (r) { return cellMonth_(r[0]) === month; })
-    .map(function (r) { return { date: cellDate_(r[1]), start: cellTime_(r[2]), end: cellTime_(r[3]), eventId: String(r[4] || '') }; });
+    .map(function (r) { return { date: cellDate_(r[1]), start: cellTime_(r[2]), end: cellTime_(r[3]), eventId: String(r[4] || ''), label: String(r[5] || '') }; });
 }
 function setSchedule_(month, items) {
   var sh = sheet_().getSheetByName('Schedule');
   var rows = sh.getDataRange().getValues();
   for (var i = rows.length - 1; i >= 0; i--) if (cellMonth_(rows[i][0]) === month) sh.deleteRow(i + 1);
-  items.forEach(function (it) { appendText_(sh, [month, it.date, it.start, it.end, it.eventId || '']); });
+  items.forEach(function (it) { appendText_(sh, [month, it.date, it.start, it.end, it.eventId || '', it.label || '']); });
 }
 
 // ---------- dates ----------
@@ -128,22 +138,38 @@ function weekKey_(dateStr) { // weeks run Mon..Sun, so Sunday is the end of its 
 }
 
 // ---------- the picker ----------
+// availability entries are 'YYYY-MM-DD' (whole day) or 'YYYY-MM-DD#slotId' (one weekend session)
+function busyFor_(availability, members, settings, date, slotId) {
+  var busy = [];
+  members.forEach(function (m) {
+    var a = availability[m];
+    if (!a) { if (settings.noAnswer === 'skip') busy.push(m + ' (no answer)'); return; }
+    if (a.indexOf(date) >= 0 || (slotId && a.indexOf(date + '#' + slotId) >= 0)) busy.push(m);
+  });
+  return busy;
+}
 function buildSchedule_(month, settings, availability) {
   var members = settings.members.map(function (m) { return m.name; });
-  var answered = Object.keys(availability);
+  var answered = Object.keys(availability).filter(function (n) { return members.indexOf(n) >= 0; });
   var days = monthDays_(month);
   var need = members.length;
   var rank = {}; settings.dayOrder.forEach(function (d, i) { rank[d] = i; });
+  var okWith = function (busy) { return settings.minFree === 'all' ? busy.length === 0 : (need - busy.length) >= Number(settings.minFree); };
 
+  // every candidate (day, session): weekdays have one session, weekends have each configured one
   var scored = days.map(function (d) {
-    var busy = [];
-    members.forEach(function (m) {
-      if (availability[m]) { if (availability[m].indexOf(d.date) >= 0) busy.push(m); }
-      else if (settings.noAnswer === 'skip') busy.push(m + ' (no answer)');
-    });
-    var free = need - busy.length;
-    var ok = settings.minFree === 'all' ? busy.length === 0 : free >= Number(settings.minFree);
-    return { date: d.date, dow: d.dow, weekend: d.weekend, busy: busy, free: free, ok: ok, rank: (d.dow in rank) ? rank[d.dow] : 99 };
+    var options = [];
+    if (d.weekend) {
+      settings.slots.weekend.forEach(function (sl, i) {
+        var busy = busyFor_(availability, members, settings, d.date, sl.id);
+        options.push({ slot: sl.id, label: sl.label, start: sl.start, end: sl.end, busy: busy, ok: okWith(busy), slotRank: i });
+      });
+    } else {
+      var busy = busyFor_(availability, members, settings, d.date, null);
+      options.push({ slot: null, label: '', start: settings.slots.weekday.start, end: settings.slots.weekday.end, busy: busy, ok: okWith(busy), slotRank: 0 });
+    }
+    var best = options.filter(function (o) { return o.ok; }).sort(function (a, b) { return a.slotRank - b.slotRank; })[0] || null;
+    return { date: d.date, dow: d.dow, weekend: d.weekend, options: options, best: best, ok: !!best, rank: (d.dow in rank) ? rank[d.dow] : 99 };
   });
 
   var byWeek = {};
@@ -164,8 +190,7 @@ function buildSchedule_(month, settings, availability) {
       chosen.push(c);
     }
     chosen.forEach(function (c) {
-      var slot = c.weekend ? settings.slots.weekend : settings.slots.weekday;
-      picked.push({ date: c.date, dow: c.dow, start: slot.start, end: slot.end });
+      picked.push({ date: c.date, dow: c.dow, slot: c.best.slot, label: c.best.label, start: c.best.start, end: c.best.end });
     });
   });
   picked.sort(function (a, b) { return a.date.localeCompare(b.date); });
@@ -181,7 +206,7 @@ function writeCalendar_(month, picked) {
   return picked.map(function (p) {
     var d = p.date.split('-').map(Number);
     var s = p.start.split(':').map(Number), e = p.end.split(':').map(Number);
-    var ev = cal.createEvent('Band practice', new Date(d[0], d[1] - 1, d[2], s[0], s[1]), new Date(d[0], d[1] - 1, d[2], e[0], e[1]),
+    var ev = cal.createEvent('Band practice' + (p.label ? ' (' + p.label.toLowerCase() + ')' : ''), new Date(d[0], d[1] - 1, d[2], s[0], s[1]), new Date(d[0], d[1] - 1, d[2], e[0], e[1]),
       { description: 'Large Martian practice. Set automatically from everyone\'s availability. ' + TAG + '\n' + SITE });
     p.eventId = ev.getId();
     return p;
@@ -212,7 +237,7 @@ function runSchedule_(month, settings) {
   var withEvents = writeCalendar_(month, res.picked);
   setSchedule_(month, withEvents);
   if (settings.notify && emails_(settings).length) {
-    var lines = withEvents.length ? withEvents.map(function (p) { return '<li><b>' + fmtDay_(p.date) + '</b>, ' + fmtTime_(p.start) + '–' + fmtTime_(p.end) + '</li>'; }).join('') : '<li>No day worked for everyone — talk it out in the band room.</li>';
+    var lines = withEvents.length ? withEvents.map(function (p) { return '<li><b>' + fmtDay_(p.date) + '</b>, ' + fmtTime_(p.start) + '–' + fmtTime_(p.end) + (p.label ? ' (' + p.label.toLowerCase() + ')' : '') + '</li>'; }).join('') : '<li>No day worked for everyone — talk it out in the band room.</li>';
     var missing = res.members.filter(function (m) { return res.answered.indexOf(m) < 0; });
     MailApp.sendEmail({
       to: emails_(settings).join(','),

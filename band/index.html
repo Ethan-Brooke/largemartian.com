@@ -188,11 +188,14 @@
 
     function draw() {
       const s = state.settings, [y, m] = month.split('-').map(Number);
-      const picked = new Set((state.schedule.length ? state.schedule : state.preview).map(p => p.date));
+      const plan = state.schedule.length ? state.schedule : state.preview;
+      const pickedMap = {}; plan.forEach(p => { pickedMap[p.date] = p; });
       const onCal = state.schedule.length > 0;
+      const weSlots = Array.isArray(s.slots.weekend) ? s.slots.weekend : [];
+      const slotLabel = id => (weSlots.find(x => x.id === id) || {}).label || '';
       const days = monthDays();
       const lead = (days[0].dow + 6) % 7; // Monday-first grid
-      const busyCount = d => Object.entries(state.availability).filter(([who, dates]) => who !== me && dates.includes(d)).map(([who]) => who);
+      const busyCount = (d, slot) => Object.entries(state.availability).filter(([who, dates]) => who !== me && (dates.includes(d) || (slot && dates.includes(d + '#' + slot)))).map(([who]) => who);
       const answered = Object.keys(state.availability).filter(n => s.members.some(x => x.name === n));
       const missing = s.members.map(x => x.name).filter(n => !answered.includes(n));
 
@@ -201,12 +204,25 @@
           <label>I am <select id="me">${s.members.map(x => `<option ${x.name === me ? 'selected' : ''}>${x.name}</option>`).join('')}</select></label>
           <div class="month-nav"><button class="btn ghost small" id="prev">‹</button><strong>${MON[m-1]} ${y}</strong><button class="btn ghost small" id="next">›</button></div>
         </div>
-        <p class="hint">Tap the days you <strong>can't</strong> make, then save. Gold = proposed practice${onCal ? ' (on the calendar)' : ''}.</p>
+        <p class="hint">Tap the days you <strong>can't</strong> make — on weekends, tap the sessions (or the date for the whole day) — then save. Gold = proposed practice${onCal ? ' (on the calendar)' : ''}.</p>
         <div class="grid">
           ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<div class="gh">${d}</div>`).join('')}
           ${'<div></div>'.repeat(lead)}
-          ${days.map(d => { const others = busyCount(d.date); const cls = ['gd', mine.has(d.date) ? 'busy' : '', picked.has(d.date) ? 'picked' : '', s.dayOrder.includes(DAYS[d.dow]) ? '' : 'off'].join(' ');
-            return `<button type="button" class="${cls}" data-d="${d.date}" title="${others.length ? 'Out: ' + others.join(', ') : ''}"><span class="n">${d.day}</span>${others.length ? `<span class="o">${others.length} out</span>` : ''}</button>`; }).join('')}
+          ${days.map(d => {
+            const isWe = d.dow === 0 || d.dow === 6;
+            const off = s.dayOrder.includes(DAYS[d.dow]) ? '' : 'off';
+            const pk = pickedMap[d.date];
+            if (!isWe) {
+              const others = busyCount(d.date);
+              const cls = ['gd', mine.has(d.date) ? 'busy' : '', pk ? 'picked' : '', off].join(' ');
+              return `<button type="button" class="${cls}" data-d="${d.date}" title="${others.length ? 'Out: ' + others.join(', ') : ''}"><span class="n">${d.day}</span>${others.length ? `<span class="o">${others.length} out</span>` : ''}</button>`;
+            }
+            const allBusy = mine.has(d.date);
+            const chips = weSlots.map(sl => { const key = d.date + '#' + sl.id; const others = busyCount(d.date, sl.id); const b = allBusy || mine.has(key);
+              const short = /^morn/i.test(sl.label) ? 'AM' : /^after/i.test(sl.label) ? 'PM' : sl.label.slice(0,3);
+              return `<button type="button" class="chip ${b ? 'busy' : ''} ${pk && pk.slot === sl.id ? 'picked' : ''}" data-k="${key}" title="${sl.label} ${fmtT(sl.start)}–${fmtT(sl.end)}${others.length ? ' — out: ' + others.join(', ') : ''}">${short}${others.length ? `<i>${others.length}</i>` : ''}</button>`; }).join('');
+            return `<div class="gd we ${allBusy ? 'busy' : ''} ${pk ? 'picked' : ''} ${off}" data-d="${d.date}"><button type="button" class="n day" data-d="${d.date}" title="Tap to mark the whole day">${d.day}</button><div class="chips">${chips}</div></div>`;
+          }).join('')}
         </div>
         <div class="row">
           <button class="btn" id="save" ${dirty ? '' : 'disabled'}>Save my days</button>
@@ -214,7 +230,7 @@
         </div>
 
         <h3>${onCal ? 'On the calendar' : 'Proposed'} for ${MON[m-1]}</h3>
-        <ul class="plan">${(onCal ? state.schedule : state.preview).map(p => { const [yy, mm, dd] = p.date.split('-').map(Number); const dt = new Date(yy, mm-1, dd); return `<li><strong>${DAYS[dt.getDay()]} ${MON[mm-1].slice(0,3)} ${dd}</strong> ${fmtT(p.start)}–${fmtT(p.end)}</li>`; }).join('') || '<li>No day works for everyone yet.</li>'}</ul>
+        <ul class="plan">${(onCal ? state.schedule : state.preview).map(p => { const [yy, mm, dd] = p.date.split('-').map(Number); const dt = new Date(yy, mm-1, dd); const lb = p.label || slotLabel(p.slot); return `<li><strong>${DAYS[dt.getDay()]} ${MON[mm-1].slice(0,3)} ${dd}</strong> ${fmtT(p.start)}–${fmtT(p.end)}${lb ? ` <span class="lb">${lb.toLowerCase()}</span>` : ''}</li>`; }).join('') || '<li>No day works for everyone yet.</li>'}</ul>
         <div class="row">
           <button class="btn" id="run">${onCal ? 'Rebuild and update the calendar' : 'Put it on the calendar'}</button>
           <button class="btn ghost" id="poll">Email everyone the poll</button>
@@ -229,7 +245,9 @@
             <label>Schedule is set on the <input type="number" min="1" max="28" id="deadlineDay" value="${s.deadlineDay}"></label>
             <label>No answer by then means <select id="noAnswer"><option value="available" ${s.noAnswer === 'available' ? 'selected' : ''}>they're available</option><option value="skip" ${s.noAnswer === 'skip' ? 'selected' : ''}>hold off on every day</option></select></label>
             <label>Weekday practice <input type="time" id="wd1" value="${s.slots.weekday.start}"> to <input type="time" id="wd2" value="${s.slots.weekday.end}"></label>
-            <label>Weekend practice <input type="time" id="we1" value="${s.slots.weekend.start}"> to <input type="time" id="we2" value="${s.slots.weekend.end}"></label>
+            <div class="wes"><strong>Weekend sessions</strong> <span class="hint" style="display:inline;margin:0">(first = most preferred)</span>
+              ${weSlots.map((sl, i) => `<div class="werow"><input type="text" value="${sl.label}" data-i="${i}" data-k="label" aria-label="Session name"><input type="time" value="${sl.start}" data-i="${i}" data-k="start"> to <input type="time" value="${sl.end}" data-i="${i}" data-k="end"><span><button type="button" class="wmv" data-i="${i}" data-dir="-1">▲</button><button type="button" class="wmv" data-i="${i}" data-dir="1">▼</button></span></div>`).join('')}
+            </div>
             <label>Pick days where <select id="minFree"><option value="all" ${s.minFree === 'all' ? 'selected' : ''}>everyone is free</option>${s.members.map((_, i) => i + 1).filter(n => n < s.members.length).map(n => `<option value="${n}" ${String(s.minFree) === String(n) ? 'selected' : ''}>at least ${n} are free</option>`).join('')}</select></label>
             <label><input type="checkbox" id="notify" ${s.notify ? 'checked' : ''}> Send the emails</label>
           </div>
@@ -250,7 +268,21 @@
       root.querySelector('#me').onchange = e => { me = e.target.value; try { localStorage.setItem(ME_KEY, me); } catch (_) {} mine = new Set(state.availability[me] || []); dirty = false; draw(); };
       root.querySelector('#prev').onclick = () => shiftMonth(-1);
       root.querySelector('#next').onclick = () => shiftMonth(1);
-      root.querySelectorAll('.gd').forEach(b => b.onclick = () => { const d = b.dataset.d; mine.has(d) ? mine.delete(d) : mine.add(d); dirty = true; draw(); });
+      root.querySelectorAll('button.gd, .gd.we .day').forEach(b => b.onclick = () => {
+        const d = b.dataset.d;
+        if (mine.has(d)) { mine.delete(d); } else { mine.add(d); weSlots.forEach(sl => mine.delete(d + '#' + sl.id)); }
+        dirty = true; draw();
+      });
+      root.querySelectorAll('.chip').forEach(b => b.onclick = () => {
+        const k = b.dataset.k, d = k.split('#')[0];
+        if (mine.has(d)) { mine.delete(d); weSlots.forEach(sl => { if (d + '#' + sl.id !== k) mine.add(d + '#' + sl.id); }); }
+        else if (mine.has(k)) mine.delete(k); else mine.add(k);
+        // all three chips busy == whole day
+        if (weSlots.length && weSlots.every(sl => mine.has(d + '#' + sl.id))) { weSlots.forEach(sl => mine.delete(d + '#' + sl.id)); mine.add(d); }
+        dirty = true; draw();
+      });
+      root.querySelectorAll('.wes input').forEach(inp => inp.oninput = () => { weSlots[+inp.dataset.i][inp.dataset.k] = inp.value; });
+      root.querySelectorAll('.wmv').forEach(b => b.onclick = () => { const i = +b.dataset.i, j = i + (+b.dataset.dir); if (j < 0 || j >= weSlots.length) return; [weSlots[i], weSlots[j]] = [weSlots[j], weSlots[i]]; draw(); root.querySelector('.settings').open = true; });
       root.querySelector('#save').onclick = async () => { msg('Saving…'); try { const r = await api({ action: 'saveAvailability', month, member: me, unavailable: [...mine] }); state.availability = r.availability; dirty = false; const p = await api({ action: 'preview', month }); state.preview = p.picked; draw(); msg('Saved.'); } catch (e) { msg(e.message, true); } };
       root.querySelector('#run').onclick = async () => { if (!confirm(`Write ${MON[m-1]}'s practices to the Google Calendar and email the band?`)) return; msg('Building…'); try { await api({ action: 'run', month }); await load(); } catch (e) { msg(e.message, true); } };
       root.querySelector('#poll').onclick = async () => { msg('Sending…'); try { await api({ action: 'openPoll', month }); msg('Poll emailed.'); } catch (e) { msg(e.message, true); } };
@@ -266,7 +298,7 @@
       root.querySelector('#saveSettings').onclick = async () => {
         const g = id => root.querySelector('#' + id);
         const ns = { practicesPerWeek: +g('ppw').value, pollDay: +g('pollDay').value, deadlineDay: +g('deadlineDay').value, noAnswer: g('noAnswer').value, minFree: g('minFree').value,
-          slots: { weekday: { start: g('wd1').value, end: g('wd2').value }, weekend: { start: g('we1').value, end: g('we2').value } },
+          slots: { weekday: { start: g('wd1').value, end: g('wd2').value }, weekend: weSlots.map(x => ({ id: x.id, label: x.label, start: x.start, end: x.end })) },
           dayOrder: s.dayOrder, members: s.members.filter(x => x.name), notify: g('notify').checked };
         msg('Saving settings…'); try { await api({ action: 'saveSettings', settings: ns }); await load(); } catch (e) { msg(e.message, true); }
       };
