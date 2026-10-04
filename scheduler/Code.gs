@@ -138,6 +138,9 @@ function buildSchedule_(month, settings, availability) {
   scored.forEach(function (d) { var k = weekKey_(d.date); (byWeek[k] = byWeek[k] || []).push(d); });
   var picked = [];
   Object.keys(byWeek).sort().forEach(function (k) {
+    // a week belongs to the month its Sunday falls in, so month edges aren't double-booked or orphaned
+    var wk = k.split('-').map(Number); var sun = new Date(wk[0], wk[1] - 1, wk[2] + 6);
+    if (ymd_(sun).slice(0, 7) !== month) return;
     var cands = byWeek[k].filter(function (d) { return d.ok && d.rank < 99; }).sort(function (a, b) { return a.rank - b.rank || a.date.localeCompare(b.date); });
     var n = Math.min(Number(settings.practicesPerWeek) || 1, cands.length);
     var chosen = [];
