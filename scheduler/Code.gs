@@ -65,35 +65,47 @@ function saveSettings_(s) {
 }
 function log_(msg) { sheet_().getSheetByName('Log').appendRow([new Date(), msg]); }
 
+// Sheets likes to turn '2026-11', '2026-11-08' and '18:00' into dates/times. Store those columns as
+// plain text, and normalise anything that was already converted when reading back.
+function cellMonth_(v) { return (v instanceof Date) ? Utilities.formatDate(v, TZ, 'yyyy-MM') : String(v || '').trim().slice(0, 7); }
+function cellDate_(v) { return (v instanceof Date) ? Utilities.formatDate(v, TZ, 'yyyy-MM-dd') : String(v || '').trim().slice(0, 10); }
+function cellTime_(v) { return (v instanceof Date) ? Utilities.formatDate(v, TZ, 'HH:mm') : String(v || '').trim(); }
+function appendText_(sh, values) {
+  var row = sh.getLastRow() + 1;
+  var rng = sh.getRange(row, 1, 1, values.length);
+  rng.setNumberFormat('@');
+  rng.setValues([values]);
+}
+
 // availability rows: month (YYYY-MM), member, JSON dates, updated
 function getAvailability_(month) {
   var sh = sheet_().getSheetByName('Availability');
   var rows = sh.getDataRange().getValues();
   var out = {};
-  rows.forEach(function (r) { if (r[0] === month && r[1]) { try { out[r[1]] = JSON.parse(r[2] || '[]'); } catch (e) { out[r[1]] = []; } } });
+  rows.forEach(function (r) { if (cellMonth_(r[0]) === month && r[1]) { try { out[String(r[1])] = JSON.parse(r[2] || '[]'); } catch (e) { out[String(r[1])] = []; } } });
   return out;
 }
 function saveAvailability_(month, member, dates) {
   var sh = sheet_().getSheetByName('Availability');
   var rows = sh.getDataRange().getValues();
   for (var i = 0; i < rows.length; i++) {
-    if (rows[i][0] === month && rows[i][1] === member) {
-      sh.getRange(i + 1, 3, 1, 2).setValues([[JSON.stringify(dates), new Date()]]);
+    if (cellMonth_(rows[i][0]) === month && String(rows[i][1]) === member) {
+      sh.getRange(i + 1, 3, 1, 2).setValues([[JSON.stringify(dates), new Date().toISOString()]]);
       return;
     }
   }
-  sh.appendRow([month, member, JSON.stringify(dates), new Date()]);
+  appendText_(sh, [month, member, JSON.stringify(dates), new Date().toISOString()]);
 }
 function getSchedule_(month) {
   var sh = sheet_().getSheetByName('Schedule');
-  return sh.getDataRange().getValues().filter(function (r) { return r[0] === month; })
-    .map(function (r) { return { date: r[1], start: r[2], end: r[3], eventId: r[4] }; });
+  return sh.getDataRange().getValues().filter(function (r) { return cellMonth_(r[0]) === month; })
+    .map(function (r) { return { date: cellDate_(r[1]), start: cellTime_(r[2]), end: cellTime_(r[3]), eventId: String(r[4] || '') }; });
 }
 function setSchedule_(month, items) {
   var sh = sheet_().getSheetByName('Schedule');
   var rows = sh.getDataRange().getValues();
-  for (var i = rows.length - 1; i >= 0; i--) if (rows[i][0] === month) sh.deleteRow(i + 1);
-  items.forEach(function (it) { sh.appendRow([month, it.date, it.start, it.end, it.eventId || '']); });
+  for (var i = rows.length - 1; i >= 0; i--) if (cellMonth_(rows[i][0]) === month) sh.deleteRow(i + 1);
+  items.forEach(function (it) { appendText_(sh, [month, it.date, it.start, it.end, it.eventId || '']); });
 }
 
 // ---------- dates ----------

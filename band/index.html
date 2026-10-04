@@ -193,7 +193,7 @@
       const days = monthDays();
       const lead = (days[0].dow + 6) % 7; // Monday-first grid
       const busyCount = d => Object.entries(state.availability).filter(([who, dates]) => who !== me && dates.includes(d)).map(([who]) => who);
-      const answered = Object.keys(state.availability);
+      const answered = Object.keys(state.availability).filter(n => s.members.some(x => x.name === n));
       const missing = s.members.map(x => x.name).filter(n => !answered.includes(n));
 
       root.innerHTML = `
