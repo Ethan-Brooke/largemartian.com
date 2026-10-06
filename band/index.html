@@ -140,7 +140,9 @@
     location.reload();
   });
 
+  let unlocked = false;
   function unlock(data) {
+    if (unlocked) return; unlocked = true;
     document.getElementById('gate').hidden = true;
     document.getElementById('room').hidden = false;
     document.body.style.background = '';
